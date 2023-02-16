@@ -15,7 +15,7 @@ export const getStaticProps: GetStaticProps = async () => {
   });
 
   return {
-    props: { movies },
+    props: { movies: JSON.parse(JSON.stringify(movies)) },
     revalidate: 10,
   };
 };
@@ -26,42 +26,25 @@ type Props = {
 
 const Blog: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
-  console.log(status);
 
   return (
     <Layout>
-      <div className="page">
+      <main className="">
+        <h1 className="text-center">MOOOVIES</h1>
         {session ? (
           <>
             <h1>Movie List</h1>
-            <main>
-              {props.movies.map((movie) => (
-                <div key={movie.id} className="movie">
-                  <Movie movie={movie} />
-                </div>
-              ))}
-            </main>
+
+            {props.movies.map((movie) => (
+              <div key={movie.id} className="bg-white mt-4">
+                <Movie movie={movie} />
+              </div>
+            ))}
           </>
         ) : (
-          <>
-            <h1>WELCOME TO MY APP</h1>
-          </>
+          <></>
         )}
-      </div>
-      <style jsx>{`
-        .movie {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .movie:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .movie + .movie {
-          margin-top: 2rem;
-        }
-      `}</style>
+      </main>
     </Layout>
   );
 };
