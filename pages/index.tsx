@@ -2,7 +2,9 @@ import React from "react";
 import prisma from "../lib/prisma";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
-import Movie, { MovieProps } from "../components/Movie";
+import { MovieProps } from "../utils/globalTypes";
+import { useSession } from "next-auth/react";
+import Movie from "../components/Movie";
 
 export const getStaticProps: GetStaticProps = async () => {
   const movies = await prisma.movie.findMany({
@@ -14,7 +16,7 @@ export const getStaticProps: GetStaticProps = async () => {
   });
 
   return {
-    props: { movies },
+    props: { movies: JSON.parse(JSON.stringify(movies)) },
     revalidate: 10,
   };
 };
@@ -23,35 +25,29 @@ type Props = {
   movies: MovieProps[];
 };
 
-const Blog: React.FC<Props> = (props) => {
+const Movies: React.FC<Props> = (props) => {
+  const { data: session, status } = useSession();
+
   return (
     <Layout>
-      <div className="page">
-        <h1>Movie List</h1>
-        <main>
-          {props.movies.map((movie) => (
-            <div key={movie.id} className="movie">
-              <Movie movie={movie} />
-            </div>
-          ))}
-        </main>
-      </div>
-      <style jsx>{`
-        .movie {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
+      <main className="">
+        <h1 className="text-center">MOOOVIES</h1>
+        {session ? (
+          <>
+            <h1>Movie List</h1>
 
-        .movie:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .movie + .movie {
-          margin-top: 2rem;
-        }
-      `}</style>
+            {props.movies.map((movie) => (
+              <div key={movie.id} className="bg-white mt-4">
+                <Movie movie={movie} />
+              </div>
+            ))}
+          </>
+        ) : (
+          <></>
+        )}
+      </main>
     </Layout>
   );
 };
 
-export default Blog;
+export default Movies;

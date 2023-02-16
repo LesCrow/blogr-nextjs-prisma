@@ -3,7 +3,7 @@ import prisma from "../../lib/prisma";
 import { GetServerSideProps } from "next";
 import ReactMarkdown from "react-markdown";
 import Layout from "../../components/Layout";
-import { MovieProps } from "../../components/Movie";
+import { MovieProps } from "../../utils/globalTypes";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const movie = await prisma.movie.findUnique({
@@ -17,22 +17,26 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   });
   return {
-    props: movie,
+    props: JSON.parse(JSON.stringify(movie)),
   };
 };
 
 const Movie: React.FC<MovieProps> = (props) => {
-  let title = props.title;
-  if (!props.seen) {
-    title = `${title} (Not seen)`;
-  }
+  const releaseDateToDateFormat = new Date(props.year);
+  const releaseDate = props.year
+    ? releaseDateToDateFormat.getFullYear()
+    : "Unknown date";
+  const alreadySeen = props.seen ? "Already seen" : "To watch";
 
   return (
     <Layout>
       <div>
-        <h2>{title}</h2>
+        <h2>
+          {props.title} ({alreadySeen})
+        </h2>
         <p>By {props.director.name || "Unknown author"}</p>
-        <ReactMarkdown children={props.title} />
+        <p>{releaseDate}</p>
+        {/* <ReactMarkdown children={props.title} /> */}
       </div>
       <style jsx>{`
         .page {
