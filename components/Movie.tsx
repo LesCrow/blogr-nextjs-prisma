@@ -1,19 +1,7 @@
 import React from "react";
 import Router from "next/router";
 import ReactMarkdown from "react-markdown";
-
-export type MovieProps = {
-  id: string;
-  title: string;
-  director: {
-    name: string;
-  } | null;
-  genre: {
-    name: string;
-  } | null;
-  year: Date;
-  seen: boolean;
-};
+import { MovieProps } from "../utils/globalTypes";
 
 const Movie: React.FC<{ movie: MovieProps }> = ({ movie }) => {
   const directorName = movie.director ? movie.director.name : "Unknown author";

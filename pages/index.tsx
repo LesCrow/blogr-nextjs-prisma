@@ -2,8 +2,9 @@ import React from "react";
 import prisma from "../lib/prisma";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
-import Movie, { MovieProps } from "../components/Movie";
+import { MovieProps } from "../utils/globalTypes";
 import { useSession } from "next-auth/react";
+import Movie from "../components/Movie";
 
 export const getStaticProps: GetStaticProps = async () => {
   const movies = await prisma.movie.findMany({
@@ -24,7 +25,7 @@ type Props = {
   movies: MovieProps[];
 };
 
-const Blog: React.FC<Props> = (props) => {
+const Movies: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
 
   return (
@@ -49,4 +50,4 @@ const Blog: React.FC<Props> = (props) => {
   );
 };
 
-export default Blog;
+export default Movies;
