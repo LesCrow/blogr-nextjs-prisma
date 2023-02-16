@@ -21,6 +21,7 @@ const Movie: React.FC<{ movie: MovieProps }> = ({ movie }) => {
   const releaseDate = movie.year
     ? releaseDateToDateFormat.getFullYear()
     : "Unknown date";
+  const alreadySeen = movie.seen ? "Already seen" : "To watch";
 
   return (
     <div
@@ -30,6 +31,7 @@ const Movie: React.FC<{ movie: MovieProps }> = ({ movie }) => {
       <h2>{movie.title}</h2>
       <small>By {directorName}</small>
       <p>{releaseDate}</p>
+      <p>{alreadySeen}</p>
       {/* <ReactMarkdown children={movie.title} /> */}
     </div>
   );
