@@ -3,6 +3,7 @@ import prisma from "../lib/prisma";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
 import Movie, { MovieProps } from "../components/Movie";
+import { useSession } from "next-auth/react";
 
 export const getStaticProps: GetStaticProps = async () => {
   const movies = await prisma.movie.findMany({
@@ -24,17 +25,28 @@ type Props = {
 };
 
 const Blog: React.FC<Props> = (props) => {
+  const { data: session, status } = useSession();
+  console.log(status);
+
   return (
     <Layout>
       <div className="page">
-        <h1>Movie List</h1>
-        <main>
-          {props.movies.map((movie) => (
-            <div key={movie.id} className="movie">
-              <Movie movie={movie} />
-            </div>
-          ))}
-        </main>
+        {session ? (
+          <>
+            <h1>Movie List</h1>
+            <main>
+              {props.movies.map((movie) => (
+                <div key={movie.id} className="movie">
+                  <Movie movie={movie} />
+                </div>
+              ))}
+            </main>
+          </>
+        ) : (
+          <>
+            <h1>WELCOME TO MY APP</h1>
+          </>
+        )}
       </div>
       <style jsx>{`
         .movie {
