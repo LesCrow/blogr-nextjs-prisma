@@ -3,8 +3,15 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
 import Router from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { directorFetcher } from "../utils/fetcher";
 
-const Draft: React.FC = () => {
+const AddAMovie: React.FC = () => {
+  const { data, error, isLoading } = useQuery(["directors"], () =>
+    directorFetcher.getAll()
+  );
+  console.log(data);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -18,7 +25,7 @@ const Draft: React.FC = () => {
     <Layout>
       <div>
         <form onSubmit={submitData}>
-          <h1>New Draft</h1>
+          <h1>New Movie</h1>
           <input
             autoFocus
             onChange={(e) => setTitle(e.target.value)}
@@ -71,4 +78,4 @@ const Draft: React.FC = () => {
   );
 };
 
-export default Draft;
+export default AddAMovie;
