@@ -5,6 +5,7 @@ import Layout from "../components/Layout";
 import { MovieProps } from "../utils/globalTypes";
 import { useSession } from "next-auth/react";
 import Movie from "../components/Movie";
+import Link from "next/link";
 
 export const getStaticProps: GetStaticProps = async () => {
   const movies = await prisma.movie.findMany({
@@ -34,7 +35,10 @@ const Movies: React.FC<Props> = (props) => {
         <h1 className="text-center">MOOOVIES</h1>
         {session ? (
           <>
-            <h1>Movie List</h1>
+            <div className="flex justify-between">
+              <h1>Movie List</h1>
+              <Link href="/create">New post</Link>
+            </div>
 
             {props.movies.map((movie) => (
               <div key={movie.id} className="bg-white mt-4">

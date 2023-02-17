@@ -92,11 +92,6 @@ const Header: React.FC = () => {
         <button onClick={() => signOut()}>
           <Image src="/pictos/turn-off.png" width={30} height={30} />
         </button>
-        {/* <Link href="/create">
-          <button>
-            <a>New post</a>
-          </button>
-        </Link> */}
 
         {/* <style jsx>{`
           a {
