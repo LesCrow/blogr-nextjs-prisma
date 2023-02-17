@@ -6,7 +6,9 @@ import Router from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { directorFetcher, genreFetcher, moviePost } from "../utils/fetcher";
 import Image from "next/image";
-import { Director, Genre } from "@prisma/client";
+import { Director, Genre, Movie } from "@prisma/client";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const AddAMovie: React.FC = () => {
   const {
@@ -21,27 +23,32 @@ const AddAMovie: React.FC = () => {
     isLoading: genresIsLoading,
   } = useQuery(["genres"], () => genreFetcher.getAll());
 
-  const [title, setTitle] = useState("");
-  const [directorId, setDirectorId] = useState("");
-  const [genreId, setGenreId] = useState("");
-  const [year, setYear] = useState(null);
-  const [seen, setSeen] = useState(false);
+  // const [title, setTitle] = useState("");
+  // const [directorId, setDirectorId] = useState("");
+  // const [genreId, setGenreId] = useState("");
+  // const [year, setYear] = useState(null);
+  // const [seen, setSeen] = useState(false);
 
-  const submitData = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    try {
-      const dataSubmitted = await moviePost.post(
-        title,
-        directorId,
-        genreId,
-        year,
-        seen
-      );
-      console.log(dataSubmitted);
-    } catch (error) {
-      console.error(error);
-    }
+  const { register, handleSubmit } = useForm();
+  const onSubmit = async (data: Movie) => {
+    await axios.post("http://localhost:3000/api/movies", data);
   };
+
+  // const submitData = async (e: React.SyntheticEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const dataSubmitted = await moviePost.post(
+  //       title,
+  //       directorId,
+  //       genreId,
+  //       year,
+  //       seen
+  //     );
+  //     console.log(dataSubmitted);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   if (directorsIsLoading || genresIsLoading) {
     return (
@@ -57,20 +64,26 @@ const AddAMovie: React.FC = () => {
   return (
     <Layout>
       <div>
-        <form onSubmit={submitData}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h1>New Movie</h1>
           <input
-            autoFocus
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Title"
-            type="text"
-            value={title}
+            {...(register("title"), { required: true })}
+            // autoFocus
+            // onChange={(e) => setTitle(e.target.value)}
+            // placeholder="Title"
+            // type="text"
+            // value={title}
           />
           <div className="flex flex-col space-y-2">
             <label>Choose a director</label>
-            <select className="w-full p-2 rounded-md border-2 border-gray-300 bg-white">
+            <select
+              {...register("directorId")}
+              className="w-full p-2 rounded-md border-2 border-gray-300 bg-white"
+            >
               {directors.map((director: Director) => (
-                <option key={director.id}>{director.name}</option>
+                <option key={director.id} value={director.id}>
+                  {director.name}
+                </option>
               ))}
             </select>
             <label>Choose a genre</label>
@@ -87,7 +100,7 @@ const AddAMovie: React.FC = () => {
             rows={8}
             value={content}
           /> */}
-          <input disabled={!title} type="submit" value="Create" />
+          <input type="submit" value="Create" />
           <a className="back" href="#" onClick={() => Router.push("/")}>
             or Cancel
           </a>
