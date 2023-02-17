@@ -1,4 +1,3 @@
-import { METHODS } from "http";
 import { NextApiResponse, NextApiRequest } from "next";
 import prisma from "../../../lib/prisma";
 
