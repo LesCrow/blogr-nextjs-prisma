@@ -4,13 +4,21 @@ import React, { useState } from "react";
 import Layout from "../components/Layout";
 import Router from "next/router";
 import { useQuery } from "@tanstack/react-query";
-import { directorFetcher } from "../utils/fetcher";
+import { directorFetcher, genreFetcher } from "../utils/fetcher";
+import Image from "next/image";
 
 const AddAMovie: React.FC = () => {
-  const { data, error, isLoading } = useQuery(["directors"], () =>
-    directorFetcher.getAll()
-  );
-  console.log(data);
+  const {
+    data: directors,
+    error: directorsError,
+    isLoading: directorsIsLoading,
+  } = useQuery(["directors"], () => directorFetcher.getAll());
+
+  const {
+    data: genres,
+    error: genresError,
+    isLoading: genresIsLoading,
+  } = useQuery(["genres"], () => genreFetcher.getAll());
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -21,6 +29,19 @@ const AddAMovie: React.FC = () => {
     // You will implement this next ...
   };
 
+  if (directorsIsLoading || genresIsLoading) {
+    return <Image src="/pictos/waiting.png" width={50} height={50} />;
+  }
+  console.log(genres);
+
+  // input[type="text"],
+  //       textarea {
+  //         width: 100%;
+  //         padding: 0.5rem;
+  //         margin: 0.5rem 0;
+  //         border-radius: 0.25rem;
+  //         border: 0.125rem solid rgba(0, 0, 0, 0.2);
+  //       }
   return (
     <Layout>
       <div>
@@ -33,6 +54,20 @@ const AddAMovie: React.FC = () => {
             type="text"
             value={title}
           />
+          <div className="flex flex-col space-y-2">
+            <label>Choose a director</label>
+            <select className="w-full p-2 rounded-md border-2 border-gray-300 bg-white">
+              {directors.map((director) => (
+                <option>{director.name}</option>
+              ))}
+            </select>
+            <label>Choose a genre</label>
+            <select className="w-full p-2 rounded-md border-2 border-gray-300 bg-white">
+              {genres.map((genre) => (
+                <option>{genre.name}</option>
+              ))}
+            </select>
+          </div>
           <textarea
             cols={50}
             onChange={(e) => setContent(e.target.value)}

@@ -37,7 +37,7 @@ const Movies: React.FC<Props> = (props) => {
           <>
             <div className="flex justify-between">
               <h1>Movie List</h1>
-              <Link href="/create">New post</Link>
+              <Link href="/create">Add a movie</Link>
             </div>
 
             {props.movies.map((movie) => (
