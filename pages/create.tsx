@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import Layout from "../components/Layout";
 import Router from "next/router";
 import { useQuery } from "@tanstack/react-query";
-import { directorFetcher, genreFetcher } from "../utils/fetcher";
+import { directorFetcher, genreFetcher, moviePost } from "../utils/fetcher";
 import Image from "next/image";
+import { Director, Genre } from "@prisma/client";
 
 const AddAMovie: React.FC = () => {
   const {
@@ -21,27 +22,38 @@ const AddAMovie: React.FC = () => {
   } = useQuery(["genres"], () => genreFetcher.getAll());
 
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [directorId, setDirectorId] = useState("");
+  const [genreId, setGenreId] = useState("");
+  const [year, setYear] = useState(null);
+  const [seen, setSeen] = useState(false);
 
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    // TODO
-    // You will implement this next ...
+    try {
+      const dataSubmitted = await moviePost.post(
+        title,
+        directorId,
+        genreId,
+        year,
+        seen
+      );
+      console.log(dataSubmitted);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (directorsIsLoading || genresIsLoading) {
-    return <Image src="/pictos/waiting.png" width={50} height={50} />;
+    return (
+      <Image
+        src="/pictos/waiting.png"
+        width={50}
+        height={50}
+        alt="Loading..."
+      />
+    );
   }
-  console.log(genres);
 
-  // input[type="text"],
-  //       textarea {
-  //         width: 100%;
-  //         padding: 0.5rem;
-  //         margin: 0.5rem 0;
-  //         border-radius: 0.25rem;
-  //         border: 0.125rem solid rgba(0, 0, 0, 0.2);
-  //       }
   return (
     <Layout>
       <div>
@@ -57,25 +69,25 @@ const AddAMovie: React.FC = () => {
           <div className="flex flex-col space-y-2">
             <label>Choose a director</label>
             <select className="w-full p-2 rounded-md border-2 border-gray-300 bg-white">
-              {directors.map((director) => (
-                <option>{director.name}</option>
+              {directors.map((director: Director) => (
+                <option key={director.id}>{director.name}</option>
               ))}
             </select>
             <label>Choose a genre</label>
             <select className="w-full p-2 rounded-md border-2 border-gray-300 bg-white">
-              {genres.map((genre) => (
-                <option>{genre.name}</option>
+              {genres.map((genre: Genre) => (
+                <option key={genre.id}>{genre.name}</option>
               ))}
             </select>
           </div>
-          <textarea
+          {/* <textarea
             cols={50}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Content"
             rows={8}
             value={content}
-          />
-          <input disabled={!content || !title} type="submit" value="Create" />
+          /> */}
+          <input disabled={!title} type="submit" value="Create" />
           <a className="back" href="#" onClick={() => Router.push("/")}>
             or Cancel
           </a>
