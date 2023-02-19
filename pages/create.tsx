@@ -23,15 +23,29 @@ const AddAMovie: React.FC = () => {
     isLoading: genresIsLoading,
   } = useQuery(["genres"], () => genreFetcher.getAll());
 
-  // const [title, setTitle] = useState("");
-  // const [directorId, setDirectorId] = useState("");
-  // const [genreId, setGenreId] = useState("");
-  // const [year, setYear] = useState(null);
-  // const [seen, setSeen] = useState(false);
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      title: "",
+      directorId: null,
+      genreId: null,
+      year: null,
+      seen: false,
+    },
+  });
 
-  const { register, handleSubmit } = useForm();
   const onSubmit = async (data: Movie) => {
-    await axios.post("http://localhost:3000/api/movies", data);
+    console.log(data);
+    try {
+      await moviePost.post(
+        data.title,
+        data.directorId,
+        data.genreId,
+        data.year,
+        data.seen
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // const submitData = async (e: React.SyntheticEvent) => {
@@ -67,7 +81,7 @@ const AddAMovie: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1>New Movie</h1>
           <input
-            {...(register("title"), { required: true })}
+            {...register("title")}
             // autoFocus
             // onChange={(e) => setTitle(e.target.value)}
             // placeholder="Title"
