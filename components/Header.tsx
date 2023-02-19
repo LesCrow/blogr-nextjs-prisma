@@ -20,6 +20,7 @@ const Header: React.FC = () => {
           src="/pictos/mov.png"
           width={40}
           height={40}
+          alt="Menu"
         />
       </Link>
     </div>
@@ -77,6 +78,7 @@ const Header: React.FC = () => {
             src="/pictos/log-in.png"
             width={40}
             height={40}
+            alt="Log in"
           />
         </Link>
       </div>
@@ -90,7 +92,12 @@ const Header: React.FC = () => {
           {session.user.name} <br /> ({session.user.email})
         </p>
         <button onClick={() => signOut()}>
-          <Image src="/pictos/turn-off.png" width={30} height={30} />
+          <Image
+            src="/pictos/turn-off.png"
+            width={30}
+            height={30}
+            alt="Log out"
+          />
         </button>
 
         {/* <style jsx>{`
