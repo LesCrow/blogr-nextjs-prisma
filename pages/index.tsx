@@ -1,20 +1,17 @@
 import React from "react";
 import prisma from "../lib/prisma";
+import { useQuery } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
-import { MovieProps } from "../utils/globalTypes";
 import { useSession } from "next-auth/react";
-import Movie from "../components/Movie";
 import Link from "next/link";
+import { movieFetcherByString } from "../utils/tmdbFetcher";
+import { Movie as TMovie } from "@prisma/client";
+import { useForm } from "react-hook-form";
+import Movie from "../components/Movie";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const movies = await prisma.movie.findMany({
-    include: {
-      director: {
-        select: { name: true },
-      },
-    },
-  });
+  const movies = await prisma.movie.findMany();
 
   return {
     props: { movies: JSON.parse(JSON.stringify(movies)) },
@@ -23,7 +20,7 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 type Props = {
-  movies: MovieProps[];
+  movies: TMovie[];
 };
 
 const Movies: React.FC<Props> = (props) => {
