@@ -37,11 +37,11 @@ const Movies: React.FC<Props> = (props) => {
               <Link href="/create">Add a movie</Link>
             </div>
 
-            {props.movies.map((movie) => (
+            {/* {props.movies.map((movie) => (
               <div key={movie.id} className="bg-white mt-4">
                 <Movie movie={movie} />
               </div>
-            ))}
+            ))} */}
           </>
         ) : (
           <></>

@@ -1,41 +1,44 @@
 import React from "react";
-import prisma from "../../lib/prisma";
-import { GetServerSideProps } from "next";
-import ReactMarkdown from "react-markdown";
 import Layout from "../../components/Layout";
 import { MovieProps } from "../../utils/globalTypes";
+import { movieById, movieFetcherByString } from "../../utils/tmdbFetcher";
+import { useQuery } from "@tanstack/react-query";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const movie = await prisma.movie.findUnique({
-    where: {
-      id: String(params?.id),
-    },
-    include: {
-      director: {
-        select: { name: true },
-      },
-    },
-  });
-  return {
-    props: JSON.parse(JSON.stringify(movie)),
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   const {
+//     data: movie,
+//     error: movieError,
+//     isLoading: movieIsLoading,
+//     // eslint-disable-next-line react-hooks/rules-of-hooks
+//   } = useQuery(["movie"], () => movieById.getOne(150));
+//   return {
+//     props: { movie },
+//   };
+// };
 
-const Movie: React.FC<MovieProps> = (props) => {
-  const releaseDateToDateFormat = new Date(props.year);
-  const releaseDate = props.year
-    ? releaseDateToDateFormat.getFullYear()
-    : "Unknown date";
-  const alreadySeen = props.seen ? "Already seen" : "To watch";
+const Movie: React.FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const idToNumber = parseInt(id as string);
+
+  const {
+    data: movie,
+    error: movieError,
+    isLoading: movieIsLoading,
+  } = useQuery(["movie"], () => movieById.getOne(idToNumber));
+
+  if (movieIsLoading) {
+    return <div>Loading...</div>;
+  }
+  console.log("movie:", movie);
 
   return (
     <Layout>
       <div>
-        <h2>
-          {props.title} ({alreadySeen})
-        </h2>
-        <p>By {props.director.name || "Unknown author"}</p>
-        <p>{releaseDate}</p>
+        <h2>{movie.title}</h2>
+
         {/* <ReactMarkdown children={props.title} /> */}
       </div>
       <style jsx>{`

@@ -5,9 +5,10 @@ import Layout from "../components/Layout";
 import Router from "next/router";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
-import { movieFetcherByString } from "../utils/tmdbFetcher";
+import { movieById, movieFetcherByString } from "../utils/tmdbFetcher";
 import Movie from "../components/Movie";
 import { MovieProps } from "../utils/globalTypes";
+import Link from "next/link";
 
 const AddAMovie: React.FC = () => {
   const { register, handleSubmit } = useForm();
@@ -27,8 +28,6 @@ const AddAMovie: React.FC = () => {
     return <div>Loading....</div>;
   }
 
-  console.log(movies.results);
-
   return (
     <Layout>
       <form onSubmit={handleSubmit(OnSubmit)}>
@@ -39,7 +38,9 @@ const AddAMovie: React.FC = () => {
         </a>
       </form>
       {movies.results.map((movie: MovieProps) => (
-        <p key={movie.id}>{movie.title} </p>
+        <Link href={`p/${movie.id}`} key={movie.id}>
+          <p>{movie.title} </p>
+        </Link>
       ))}
       <style jsx>{`
         .page {
