@@ -1,41 +1,71 @@
 import React from "react";
-import prisma from "../../lib/prisma";
-import { GetServerSideProps } from "next";
-import ReactMarkdown from "react-markdown";
 import Layout from "../../components/Layout";
-import { MovieProps } from "../../utils/globalTypes";
+import { DirectorProps, MovieProps } from "../../utils/globalTypes";
+import {
+  movieById,
+  movieFetcherByString,
+  moviePosterFetcher,
+} from "../../utils/tmdbFetcher";
+import { useQuery } from "@tanstack/react-query";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const movie = await prisma.movie.findUnique({
-    where: {
-      id: String(params?.id),
-    },
-    include: {
-      director: {
-        select: { name: true },
-      },
-    },
-  });
-  return {
-    props: JSON.parse(JSON.stringify(movie)),
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   const {
+//     data: movie,
+//     error: movieError,
+//     isLoading: movieIsLoading,
+//     // eslint-disable-next-line react-hooks/rules-of-hooks
+//   } = useQuery(["movie"], () => movieById.getOne(150));
+//   return {
+//     props: { movie },
+//   };
+// };
 
-const Movie: React.FC<MovieProps> = (props) => {
-  const releaseDateToDateFormat = new Date(props.year);
-  const releaseDate = props.year
-    ? releaseDateToDateFormat.getFullYear()
-    : "Unknown date";
-  const alreadySeen = props.seen ? "Already seen" : "To watch";
+const Movie: React.FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const idToNumber = parseInt(id as string);
 
+  const {
+    data: movie,
+    error: movieError,
+    isLoading: movieIsLoading,
+  } = useQuery<MovieProps>(["movie"], () => movieById.getOne(idToNumber));
+
+  if (movieIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const director: DirectorProps[] = movie.credits.crew.filter(
+    ({ job }) => job === "Director"
+  );
+  console.log(movie);
   return (
     <Layout>
-      <div>
-        <h2>
-          {props.title} ({alreadySeen})
-        </h2>
-        <p>By {props.director.name || "Unknown author"}</p>
-        <p>{releaseDate}</p>
+      <div className="flex flex-col items-center space-y-4">
+        <div className="flex w-full justify-around mb-4">
+          <p>To watch</p>
+          <p>Add to my movie list</p>
+        </div>
+        <Image
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          width={200}
+          height={300}
+          alt={movie.title}
+        />
+        <h2>{movie.title}</h2>
+        <p>by {director[0].name}</p>
+        <p>{movie.release_date}</p>
+        <div className="flex w-full justify-between">
+          {movie.genres.map((genre) => (
+            <p key={genre.id}>{genre.name}</p>
+          ))}
+        </div>
+        <p className="text-center">{movie.overview}</p>
+        <p>{movie.vote_average} / 10</p>
+
         {/* <ReactMarkdown children={props.title} /> */}
       </div>
       <style jsx>{`

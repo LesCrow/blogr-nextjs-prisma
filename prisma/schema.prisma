@@ -12,12 +12,8 @@ datasource db {
 
 model Movie {
   id String @default(cuid()) @id
-  title String
-  director Director ? @relation(fields: [directorId], references: [id])
-  directorId String ?
-  genre Genre ? @relation(fields: [genreId], references: [id])
-  genreId String ?
-  year DateTime ?
+  api_id Int @unique
+  url String @unique
   seen Boolean @default(false)
   users User[]
 
@@ -25,14 +21,13 @@ model Movie {
 
 model Director {
   id String @default(cuid()) @id
-  name String
-  movies Movie[]
+  url String @unique
 }
 
 model Genre {
   id String @default(cuid()) @id
   name String @unique
-  movies Movie[]
+  url String @unique
 }
 
 

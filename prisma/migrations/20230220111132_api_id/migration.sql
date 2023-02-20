@@ -1,10 +1,8 @@
 -- CreateTable
 CREATE TABLE "Movie" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "directorId" TEXT,
-    "genreId" TEXT,
-    "year" TIMESTAMP(3),
+    "api_id" INTEGER NOT NULL,
+    "url" TEXT NOT NULL,
     "seen" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Movie_pkey" PRIMARY KEY ("id")
@@ -13,7 +11,7 @@ CREATE TABLE "Movie" (
 -- CreateTable
 CREATE TABLE "Director" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
 
     CONSTRAINT "Director_pkey" PRIMARY KEY ("id")
 );
@@ -22,6 +20,7 @@ CREATE TABLE "Director" (
 CREATE TABLE "Genre" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
 
     CONSTRAINT "Genre_pkey" PRIMARY KEY ("id")
 );
@@ -86,7 +85,19 @@ CREATE TABLE "_MovieToUser" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Movie_api_id_key" ON "Movie"("api_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Movie_url_key" ON "Movie"("url");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Director_url_key" ON "Director"("url");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Genre_name_key" ON "Genre"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Genre_url_key" ON "Genre"("url");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
@@ -108,12 +119,6 @@ CREATE UNIQUE INDEX "_MovieToUser_AB_unique" ON "_MovieToUser"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_MovieToUser_B_index" ON "_MovieToUser"("B");
-
--- AddForeignKey
-ALTER TABLE "Movie" ADD CONSTRAINT "Movie_directorId_fkey" FOREIGN KEY ("directorId") REFERENCES "Director"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Movie" ADD CONSTRAINT "Movie_genreId_fkey" FOREIGN KEY ("genreId") REFERENCES "Genre"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
