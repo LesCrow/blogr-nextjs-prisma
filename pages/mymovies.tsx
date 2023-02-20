@@ -45,8 +45,6 @@ const MovieList = (props: TProps) => {
     fetchMovies(api_ids);
   }, []);
 
-  console.log(movies);
-
   return (
     <Layout>
       <div>
@@ -61,5 +59,3 @@ const MovieList = (props: TProps) => {
 };
 
 export default MovieList;
-
-//`/movie/${id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`

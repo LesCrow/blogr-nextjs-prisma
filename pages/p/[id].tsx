@@ -46,7 +46,7 @@ const Movie: React.FC = () => {
   const director: DirectorProps[] = movie.credits.crew.filter(
     ({ job }) => job === "Director"
   );
-  console.log(idToNumber);
+
   return (
     <Layout>
       <div className="flex flex-col items-center space-y-4">

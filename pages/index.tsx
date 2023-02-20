@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { movieFetcherByString } from "../utils/tmdbFetcher";
 import Router from "next/router";
 import { MovieProps } from "../utils/globalTypes";
+import Image from "next/image";
 
 // export const getStaticProps: GetStaticProps = async () => {
 //   const movies = await prisma.movie.findMany();
@@ -45,19 +46,18 @@ const Movies: React.FC<Props> = (props) => {
   return (
     <Layout>
       <main className="">
-        <h1 className="text-center">MOOOVIES</h1>
+        <Image src="/pictos/logo.png" width={400} height={100} alt="MOOOVIES" />
         {session ? (
           <>
             <div className="flex justify-between">
-              <Link href="/mymovies">My movies</Link>
-              <Link href="/create">Add a movie</Link>
+              <Link href="/mymovies">My movie list</Link>
             </div>
             <form onSubmit={handleSubmit(OnSubmit)}>
               <input {...register("query")} />
-              <input type="submit" />
-              <a className="back" href="#" onClick={() => Router.push("/")}>
+              <input type="submit" value="Send" />
+              {/* <a className="back" href="#" onClick={() => Router.push("/")}>
                 or Cancel
-              </a>
+              </a> */}
             </form>
             {movies.results.map((movie: MovieProps) => (
               <Link href={`p/${movie.id}`} key={movie.id}>
