@@ -1,10 +1,15 @@
 import React from "react";
 import Layout from "../../components/Layout";
 import { MovieProps } from "../../utils/globalTypes";
-import { movieById, movieFetcherByString } from "../../utils/tmdbFetcher";
+import {
+  movieById,
+  movieFetcherByString,
+  moviePosterFetcher,
+} from "../../utils/tmdbFetcher";
 import { useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -32,12 +37,21 @@ const Movie: React.FC = () => {
   if (movieIsLoading) {
     return <div>Loading...</div>;
   }
-  console.log("movie:", movie);
+  console.log(movie);
+
+  const director = movie.credits.crew.filter(({ job }) => job === "Director");
 
   return (
     <Layout>
-      <div>
+      <div className="flex flex-col items-center">
+        <Image
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          width={200}
+          height={300}
+          alt={movie.title}
+        />
         <h2>{movie.title}</h2>
+        <p>by {director[0].name}</p>
 
         {/* <ReactMarkdown children={props.title} /> */}
       </div>

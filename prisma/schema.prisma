@@ -12,6 +12,7 @@ datasource db {
 
 model Movie {
   id String @default(cuid()) @id
+  api_id Int @unique
   url String @unique
   seen Boolean @default(false)
   users User[]

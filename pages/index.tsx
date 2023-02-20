@@ -26,6 +26,8 @@ type Props = {
 const Movies: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
 
+  console.log(process.env.NEXT_PUBLIC_APIKEY);
+
   return (
     <Layout>
       <main className="">

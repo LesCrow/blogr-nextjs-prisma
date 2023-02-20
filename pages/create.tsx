@@ -1,19 +1,18 @@
 // pages/create.tsx
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
 import Router from "next/router";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
-import { movieById, movieFetcherByString } from "../utils/tmdbFetcher";
-import Movie from "../components/Movie";
+import { movieFetcherByString, moviePosterFetcher } from "../utils/tmdbFetcher";
+
 import { MovieProps } from "../utils/globalTypes";
 import Link from "next/link";
 
 const AddAMovie: React.FC = () => {
   const { register, handleSubmit } = useForm();
-  const [data, setData] = useState([]);
-  const [query, setQuery] = useState("et");
+  const [query, setQuery] = useState("forrest+gump");
   const OnSubmit = (data: any) => {
     setQuery(data.query);
   };

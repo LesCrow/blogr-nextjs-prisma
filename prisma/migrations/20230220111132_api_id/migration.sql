@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE "Movie" (
     "id" TEXT NOT NULL,
+    "api_id" INTEGER NOT NULL,
     "url" TEXT NOT NULL,
     "seen" BOOLEAN NOT NULL DEFAULT false,
 
@@ -82,6 +83,9 @@ CREATE TABLE "_MovieToUser" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Movie_api_id_key" ON "Movie"("api_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Movie_url_key" ON "Movie"("url");
