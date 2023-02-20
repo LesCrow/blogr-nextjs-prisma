@@ -2,6 +2,7 @@
 import { Movie } from "@prisma/client";
 import axios from "axios";
 import { GetStaticProps } from "next";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import prisma from "../lib/prisma";
@@ -24,7 +25,7 @@ const MovieList = (props: TProps) => {
   const [movies, setMovies] = useState([]);
   props.movies.map((movie) => api_ids.push(movie.api_id));
 
-  const fetchMovies = async (api_ids) => {
+  const fetchMovies = async (api_ids: number[]) => {
     const promises = api_ids.map((api_id) =>
       axios.get(
         `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
@@ -50,7 +51,9 @@ const MovieList = (props: TProps) => {
     <Layout>
       <div>
         {movies.map((movie) => (
-          <p key={movie.id}>{movie.title}</p>
+          <Link key={movie.id} href={`p/${movie.id}`}>
+            <p>{movie.title}</p>
+          </Link>
         ))}
       </div>
     </Layout>
