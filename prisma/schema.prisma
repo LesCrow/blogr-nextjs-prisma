@@ -13,15 +13,14 @@ datasource db {
 model Movie {
   id String @default(cuid()) @id
   api_id Int @unique
-  url String @unique
-  seen Boolean @default(false)
-  users User[]
+  toWatch Boolean @default(false)
+  favourite Boolean @default(false)
 
 }
 
 model Director {
   id String @default(cuid()) @id
-  url String @unique
+  api_id Int @unique
 }
 
 model Genre {
@@ -37,7 +36,6 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image String?
-  movies Movie[]
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   accounts      Account[]

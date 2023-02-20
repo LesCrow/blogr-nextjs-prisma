@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { moviePost } from "../../utils/fetcher";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -38,16 +39,19 @@ const Movie: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const handleSubmit = () => {
+    moviePost.post(idToNumber, false, false);
+  };
+
   const director: DirectorProps[] = movie.credits.crew.filter(
     ({ job }) => job === "Director"
   );
-  console.log(movie);
+  console.log(idToNumber);
   return (
     <Layout>
       <div className="flex flex-col items-center space-y-4">
         <div className="flex w-full justify-around mb-4">
-          <p>To watch</p>
-          <p>Add to my movie list</p>
+          <button onClick={handleSubmit}>Add to my movie list</button>
         </div>
         <Image
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}

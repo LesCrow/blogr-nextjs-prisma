@@ -16,15 +16,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     case "POST":
       try {
-        const { title, directorId, genreId, seen, year } = req.body;
+        const { api_id, toWatch, favourite } = req.body;
 
         const newBook = await prisma.movie.create({
           data: {
-            title: title,
-            directorId: directorId,
-            genreId: genreId,
-            seen: seen,
-            year: year,
+            api_id: api_id,
+            toWatch: toWatch,
+            favourite: favourite,
           },
         });
         res.status(200).json(newBook);
