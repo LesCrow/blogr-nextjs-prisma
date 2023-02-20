@@ -69,7 +69,7 @@ const Movies: React.FC<Props> = (props) => {
         >
           <input className="rounded-full h-8 px-4" {...register("query")} />
           <button
-            className="border border-blue-600 bg-blue-400 text-white rounded-full w-fit p-2 mx-auto"
+            className="border border-blue-600 bg-blue-400 text-white rounded-full w-fit px-4 py-1 mx-auto"
             type="submit"
           >
             Search
