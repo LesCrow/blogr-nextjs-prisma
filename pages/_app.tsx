@@ -6,6 +6,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
+import { Roboto } from "@next/font/google";
 
 const queryClient = new QueryClient();
 const App = ({ Component, pageProps }: AppProps) => {

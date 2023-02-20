@@ -1,11 +1,7 @@
 import React from "react";
 import Layout from "../../components/Layout";
 import { DirectorProps, MovieProps } from "../../utils/globalTypes";
-import {
-  movieById,
-  movieFetcherByString,
-  moviePosterFetcher,
-} from "../../utils/tmdbFetcher";
+import { movieById } from "../../utils/tmdbFetcher";
 import { useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
