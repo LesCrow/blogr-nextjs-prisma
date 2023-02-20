@@ -49,6 +49,7 @@ const Movies: React.FC<Props> = (props) => {
         {session ? (
           <>
             <div className="flex justify-between">
+              <Link href="/mymovies">My movies</Link>
               <Link href="/create">Add a movie</Link>
             </div>
             <form onSubmit={handleSubmit(OnSubmit)}>
