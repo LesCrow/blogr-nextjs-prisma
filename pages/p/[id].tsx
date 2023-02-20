@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "../../components/Layout";
-import { MovieProps } from "../../utils/globalTypes";
+import { DirectorProps, MovieProps } from "../../utils/globalTypes";
 import {
   movieById,
   movieFetcherByString,
@@ -32,18 +32,23 @@ const Movie: React.FC = () => {
     data: movie,
     error: movieError,
     isLoading: movieIsLoading,
-  } = useQuery(["movie"], () => movieById.getOne(idToNumber));
+  } = useQuery<MovieProps>(["movie"], () => movieById.getOne(idToNumber));
 
   if (movieIsLoading) {
     return <div>Loading...</div>;
   }
+
+  const director: DirectorProps[] = movie.credits.crew.filter(
+    ({ job }) => job === "Director"
+  );
   console.log(movie);
-
-  const director = movie.credits.crew.filter(({ job }) => job === "Director");
-
   return (
     <Layout>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="flex w-full justify-around mb-4">
+          <p>To watch</p>
+          <p>Add to my movie list</p>
+        </div>
         <Image
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           width={200}
@@ -52,6 +57,14 @@ const Movie: React.FC = () => {
         />
         <h2>{movie.title}</h2>
         <p>by {director[0].name}</p>
+        <p>{movie.release_date}</p>
+        <div className="flex w-full justify-between">
+          {movie.genres.map((genre) => (
+            <p key={genre.id}>{genre.name}</p>
+          ))}
+        </div>
+        <p className="text-center">{movie.overview}</p>
+        <p>{movie.vote_average} / 10</p>
 
         {/* <ReactMarkdown children={props.title} /> */}
       </div>

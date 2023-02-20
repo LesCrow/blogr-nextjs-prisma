@@ -1,46 +1,11 @@
 // pages/create.tsx
 
-import React, { useState } from "react";
+import React from "react";
 import Layout from "../components/Layout";
-import Router from "next/router";
-import { useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
-import { movieFetcherByString, moviePosterFetcher } from "../utils/tmdbFetcher";
-
-import { MovieProps } from "../utils/globalTypes";
-import Link from "next/link";
 
 const AddAMovie: React.FC = () => {
-  const { register, handleSubmit } = useForm();
-  const [query, setQuery] = useState("forrest+gump");
-  const OnSubmit = (data: any) => {
-    setQuery(data.query);
-  };
-
-  const {
-    data: movies,
-    error: moviesError,
-    isLoading: moviesIsLoading,
-  } = useQuery(["movies"], () => movieFetcherByString.getOne(query));
-
-  if (moviesIsLoading) {
-    return <div>Loading....</div>;
-  }
-
   return (
     <Layout>
-      <form onSubmit={handleSubmit(OnSubmit)}>
-        <input {...register("query")} />
-        <input type="submit" />
-        <a className="back" href="#" onClick={() => Router.push("/")}>
-          or Cancel
-        </a>
-      </form>
-      {movies.results.map((movie: MovieProps) => (
-        <Link href={`p/${movie.id}`} key={movie.id}>
-          <p>{movie.title} </p>
-        </Link>
-      ))}
       <style jsx>{`
         .page {
           background: var(--geist-background);
