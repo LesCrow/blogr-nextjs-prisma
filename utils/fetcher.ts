@@ -10,15 +10,9 @@ export const genreFetcher = {
 };
 
 export const moviePost = {
-  post: async (
-    api_id: number,
-    toWatch: boolean,
-    alreadySeen: boolean,
-    favourite: boolean
-  ) =>
+  post: async (api_id: number, alreadySeen: boolean, favourite: boolean) =>
     await axiosInstance.post<Movie>("movies", {
       api_id: api_id,
-      toWatch: toWatch,
       alreadySeen: alreadySeen,
       favourite: favourite,
     }),

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Layout from "../../components/Layout";
 import { DirectorProps, MovieProps } from "../../utils/globalTypes";
 import { movieById } from "../../utils/tmdbFetcher";
@@ -52,8 +52,12 @@ const Movie: React.FC = () => {
     return notify;
   };
 
-  const handleSubmitMovieList = (id, toWatch, alreadySeen, favourite) => {
-    moviePost.post(id, toWatch, alreadySeen, favourite);
+  const handleSubmitMovieList = (
+    id: number,
+    alreadySeen: boolean,
+    favourite: boolean
+  ) => {
+    moviePost.post(id, alreadySeen, favourite);
   };
 
   const handleSubmitFavourite = (session: object) => {
@@ -111,14 +115,14 @@ const Movie: React.FC = () => {
           <div className="flex flex-col">
             <button
               onClick={() => {
-                handleSubmitMovieList(idToNumber, true, false, false);
+                handleSubmitMovieList(idToNumber, true, false);
               }}
             >
               A Voir
             </button>
             <button
               onClick={() => {
-                handleSubmitMovieList(idToNumber, false, true, false);
+                handleSubmitMovieList(idToNumber, false, false);
               }}
             >
               Déjà vu
