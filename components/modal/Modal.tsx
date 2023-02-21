@@ -31,7 +31,7 @@ const Modal = ({
                     <span>&times;</span>
                   </button>
                 </div>
-                <div className="modal-body ">{props.children}</div>
+                <div className="mt-5">{props.children}</div>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { moviePost } from "../../utils/fetcher";
+import { getMovieByApiId, moviePost } from "../../utils/fetcher";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -40,6 +40,14 @@ const Movie: React.FC = () => {
     error: movieError,
     isLoading: movieIsLoading,
   } = useQuery<MovieProps>(["movie"], () => movieById.getOne(idToNumber));
+
+  const {
+    data: myMovie,
+    error: myMovieError,
+    isLoading: myMovieIsLoading,
+  } = useQuery(["myMovie"], () => getMovieByApiId.getOne(238));
+
+  console.log(myMovie);
 
   if (movieIsLoading) {
     return <div>Loading...</div>;
@@ -77,14 +85,6 @@ const Movie: React.FC = () => {
           <button onClick={onClickAdd(session)}>
             <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
           </button>
-          <button>
-            <Image
-              src="/pictos/checkmark.png"
-              width={40}
-              height={40}
-              alt="check"
-            />
-          </button>
           <button onClick={handleSubmitFavourite(session)}>
             <Image
               src="/pictos/coeur-noir.png"
@@ -112,7 +112,7 @@ const Movie: React.FC = () => {
         <p className="text-center">{movie.overview}</p>
         <p>{movie.vote_average}</p>
         <Modal isShowing={isShowing} hide={toggle} title="Ajouter à ma liste">
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-5">
             <button
               onClick={() => {
                 handleSubmitMovieList(idToNumber, true, false);
