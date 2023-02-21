@@ -20,27 +20,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       break;
 
-    // case "PUT":
-    //   try {
-    //     const { title, directorId, genreId, seen, year } = req.body;
-    //     const updatedMovie = await prisma.movie.update({
-    //       where: {
-    //         id: id as string,
-    //       },
-    //       data: {
-    //         title: title,
-    //         directorId: directorId,
-    //         genreId: genreId,
-    //         seen: seen,
-    //         year: year,
-    //       },
-    //     });
-    //     res.status(200).json(updatedMovie);
-    //   } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json({ message: error });
-    //   }
-    //   break;
+    case "PUT":
+      try {
+        const { alreadySeen, favourite } = req.body;
+        const updatedMovie = await prisma.movie.update({
+          where: {
+            id: id as string,
+          },
+          data: {
+            alreadySeen: alreadySeen,
+            favourite: favourite,
+          },
+        });
+        res.status(200).json(updatedMovie);
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error });
+      }
+      break;
 
     case "DELETE":
       try {

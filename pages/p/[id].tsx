@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { getMovieByApiId, moviePost } from "../../utils/fetcher";
+import { getMovieByApiId, movieFetcher } from "../../utils/fetcher";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -41,6 +41,9 @@ const Movie: React.FC = () => {
   const notify = () => toast("Veuillez vous connectez");
   const { isShowing, toggle } = useModal();
 
+  const [data, setData] = useState<TMyMovie[]>([]);
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
+
   const {
     data: movie,
     error: movieError,
@@ -51,9 +54,16 @@ const Movie: React.FC = () => {
     data: myMovie,
     error: myMovieError,
     isLoading: myMovieIsLoading,
-  } = useQuery<TMyMovie[]>(["myMovie"], () => getMovieByApiId.getOne(238));
+  } = useQuery<TMyMovie[]>(
+    ["myMovie"],
+    async () => await getMovieByApiId.getOne(idToNumber)
+  );
 
-  console.log(myMovie);
+  useEffect(() => {
+    if (myMovie) {
+      setData(myMovie);
+    }
+  }, [myMovie]);
 
   if (movieIsLoading || myMovieIsLoading) {
     return <div>Loading...</div>;
@@ -71,11 +81,18 @@ const Movie: React.FC = () => {
     alreadySeen: boolean,
     favourite: boolean
   ) => {
-    moviePost.post(id, alreadySeen, favourite);
+    movieFetcher.post(id, alreadySeen, favourite);
   };
 
-  const handleSubmitFavourite = (session: object) => {
-    return notify;
+  const handleSubmitFavouriteState = () => {};
+
+  const handleSubmitFavourite = (
+    id: string,
+    favourite: boolean,
+    alreadySeen: boolean
+  ) => {
+    console.log(isFavourite);
+    movieFetcher.update(id, alreadySeen, favourite);
   };
 
   const director: DirectorProps[] = movie.credits.crew.filter(
@@ -91,8 +108,17 @@ const Movie: React.FC = () => {
           <button onClick={onClickAdd(session)}>
             <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
           </button>
-          <button onClick={handleSubmitFavourite(session)}>
-            {myMovie[0].favourite ? (
+          <button
+            onClick={() => {
+              setIsFavourite(!isFavourite);
+              handleSubmitFavourite(
+                myMovie[0].id,
+                isFavourite,
+                myMovie[0].already_seen
+              );
+            }}
+          >
+            {myMovie[0].favourite && isFavourite ? (
               <Image
                 src="/pictos/coeur.png"
                 width={30}

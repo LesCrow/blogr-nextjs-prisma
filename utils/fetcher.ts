@@ -8,10 +8,15 @@ export const getMovieByApiId = {
     ).data,
 };
 
-export const moviePost = {
+export const movieFetcher = {
   post: async (api_id: number, alreadySeen: boolean, favourite: boolean) =>
     await axiosInstance.post<Movie>("movies", {
       api_id: api_id,
+      alreadySeen: alreadySeen,
+      favourite: favourite,
+    }),
+  update: async (id: string, alreadySeen: boolean, favourite: boolean) =>
+    await axiosInstance.put(`movies/${id}`, {
       alreadySeen: alreadySeen,
       favourite: favourite,
     }),
