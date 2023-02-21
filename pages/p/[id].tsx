@@ -45,26 +45,18 @@ const Movie: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(session);
-
-  // const handleSubmitList = (session: object) => {
-  //   if (session) {
-  //     moviePost.post(idToNumber, false, false);
-  //   }
-  //   return notify;
-  // };
-  // const handleSubmitAdd = (session: object) => {
-  //   if (session) {
-  //     return toggle;
-  //   }
-  //   return notify;
-  // };
-
-  const handleSubmitFavourite = (session: object) => {
+  const onClickAdd = (session: object) => {
+    if (session) {
+      return toggle;
+    }
     return notify;
   };
 
-  const handleSubmitAlreadySeen = (session: object) => {
+  const handleSubmitMovieList = (id, toWatch, alreadySeen, favourite) => {
+    moviePost.post(id, toWatch, alreadySeen, favourite);
+  };
+
+  const handleSubmitFavourite = (session: object) => {
     return notify;
   };
 
@@ -78,10 +70,10 @@ const Movie: React.FC = () => {
 
       <div className="flex flex-col items-center space-y-4">
         <div className="flex w-full justify-around mb-4">
-          <button onClick={toggle}>
+          <button onClick={onClickAdd(session)}>
             <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
           </button>
-          <button onClick={handleSubmitAlreadySeen(session)}>
+          <button>
             <Image
               src="/pictos/checkmark.png"
               width={40}
@@ -115,10 +107,24 @@ const Movie: React.FC = () => {
         </div>
         <p className="text-center">{movie.overview}</p>
         <p>{movie.vote_average}</p>
-        <Modal isShowing={isShowing} hide={toggle} title="select">
-          <p>agfezgfdfsg</p>
+        <Modal isShowing={isShowing} hide={toggle} title="Ajouter à ma liste">
+          <div className="flex flex-col">
+            <button
+              onClick={() => {
+                handleSubmitMovieList(idToNumber, true, false, false);
+              }}
+            >
+              A Voir
+            </button>
+            <button
+              onClick={() => {
+                handleSubmitMovieList(idToNumber, false, true, false);
+              }}
+            >
+              Déjà vu
+            </button>
+          </div>
         </Modal>
-        {/* <ReactMarkdown children={props.title} /> */}
       </div>
     </Layout>
   );
