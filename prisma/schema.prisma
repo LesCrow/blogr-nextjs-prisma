@@ -15,6 +15,7 @@ model Movie {
   api_id Int @unique
   toWatch Boolean @default(false)
   favourite Boolean @default(false)
+  alreadySeen Boolean @default(false)
 
 }
 

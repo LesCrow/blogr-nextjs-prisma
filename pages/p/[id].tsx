@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../components/Layout";
 import { DirectorProps, MovieProps } from "../../utils/globalTypes";
 import { movieById } from "../../utils/tmdbFetcher";
@@ -11,6 +11,8 @@ import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { releaseDate } from "../../utils/constants";
+import Modal from "../../components/modal/Modal";
+import useModal from "../../components/modal/UseModal";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -31,6 +33,8 @@ const Movie: React.FC = () => {
   const idToNumber = parseInt(id as string);
   const notify = () => toast("Veuillez vous connectez");
 
+  const { isShowing, toggle } = useModal();
+
   const {
     data: movie,
     error: movieError,
@@ -41,14 +45,26 @@ const Movie: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  const handleSubmitList = (session: object) => {
-    if (session) {
-      moviePost.post(idToNumber, false, false);
-    }
+  console.log(session);
+
+  // const handleSubmitList = (session: object) => {
+  //   if (session) {
+  //     moviePost.post(idToNumber, false, false);
+  //   }
+  //   return notify;
+  // };
+  // const handleSubmitAdd = (session: object) => {
+  //   if (session) {
+  //     return toggle;
+  //   }
+  //   return notify;
+  // };
+
+  const handleSubmitFavourite = (session: object) => {
     return notify;
   };
 
-  const handleSubmitFavourite = (session: object) => {
+  const handleSubmitAlreadySeen = (session: object) => {
     return notify;
   };
 
@@ -58,11 +74,20 @@ const Movie: React.FC = () => {
 
   return (
     <Layout>
+      <ToastContainer position="top-center" />
+
       <div className="flex flex-col items-center space-y-4">
         <div className="flex w-full justify-around mb-4">
-          <button onClick={handleSubmitList(session)}>
+          <button onClick={toggle}>
             <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
-            <ToastContainer position="top-center" />
+          </button>
+          <button onClick={handleSubmitAlreadySeen(session)}>
+            <Image
+              src="/pictos/checkmark.png"
+              width={40}
+              height={40}
+              alt="check"
+            />
           </button>
           <button onClick={handleSubmitFavourite(session)}>
             <Image
@@ -79,6 +104,7 @@ const Movie: React.FC = () => {
           height={300}
           alt={movie.title}
         />
+
         <h2>{movie.title}</h2>
         <p>by {director[0].name}</p>
         <p>{releaseDate(movie.release_date)}</p>
@@ -89,7 +115,9 @@ const Movie: React.FC = () => {
         </div>
         <p className="text-center">{movie.overview}</p>
         <p>{movie.vote_average}</p>
-
+        <Modal isShowing={isShowing} hide={toggle} title="select">
+          <p>agfezgfdfsg</p>
+        </Modal>
         {/* <ReactMarkdown children={props.title} /> */}
       </div>
     </Layout>
