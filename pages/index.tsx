@@ -11,6 +11,7 @@ import { movieByString, moviesByTopRated } from "../utils/tmdbFetcher";
 import { MovieProps } from "../utils/globalTypes";
 import Image from "next/image";
 import { Roboto } from "@next/font/google";
+import MovieList from "../components/MovieList";
 
 // export const getStaticProps: GetStaticProps = async () => {
 //   const movies = await prisma.movie.findMany();
@@ -57,7 +58,6 @@ const Movies: React.FC<Props> = (props) => {
   if (moviesIsLoading || moviesTopeRatedIsLoading) {
     return <div>Loading....</div>;
   }
-  console.log(moviesTopRated);
 
   return (
     <Layout>
@@ -79,10 +79,7 @@ const Movies: React.FC<Props> = (props) => {
           <div className="pt-6">
             {moviesTopRated.results.map((movie: MovieProps) => (
               <Link href={`p/${movie.id}`} key={movie.id}>
-                <div className="flex justify-between">
-                  <p className="w-[80%]">{movie.title} </p>
-                  <small>{movie.vote_average}</small>
-                </div>
+                <MovieList key={movie.id} movie={movie} />
               </Link>
             ))}
           </div>
@@ -90,7 +87,7 @@ const Movies: React.FC<Props> = (props) => {
           <div className="pt-6">
             {movies.results.map((movie: MovieProps) => (
               <Link href={`p/${movie.id}`} key={movie.id}>
-                <p>{movie.title} </p>
+                <MovieList key={movie.id} movie={movie} />
               </Link>
             ))}
           </div>

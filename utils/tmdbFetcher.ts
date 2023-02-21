@@ -23,7 +23,7 @@ export const moviesByTopRated = {
   getAll: async () =>
     (
       await axiosInstanceTmdb.get(
-        `/movie/top_rated?api_key=${process.env.NEXT_PUBLIC_APIKEY}&language=en-US&page=1`
+        `/movie/top_rated?api_key=${process.env.NEXT_PUBLIC_APIKEY}&language=en-US&page=1&append_to_response=credits`
       )
     ).data,
 };

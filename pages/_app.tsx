@@ -1,12 +1,7 @@
 import { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
-import { Roboto } from "@next/font/google";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 const App = ({ Component, pageProps }: AppProps) => {

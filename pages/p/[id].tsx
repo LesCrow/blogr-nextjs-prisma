@@ -42,6 +42,7 @@ const Movie: React.FC = () => {
   const director: DirectorProps[] = movie.credits.crew.filter(
     ({ job }) => job === "Director"
   );
+  console.log(movie);
 
   return (
     <Layout>
