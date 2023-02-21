@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import { DirectorProps, MovieProps } from "../../utils/globalTypes";
 import { movieById } from "../../utils/tmdbFetcher";
@@ -26,13 +26,19 @@ import useModal from "../../components/modal/UseModal";
 //   };
 // };
 
+type TMyMovie = {
+  id: string;
+  api_id: number;
+  already_seen: boolean;
+  favourite: boolean;
+};
+
 const Movie: React.FC = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { id } = router.query;
   const idToNumber = parseInt(id as string);
   const notify = () => toast("Veuillez vous connectez");
-
   const { isShowing, toggle } = useModal();
 
   const {
@@ -45,11 +51,11 @@ const Movie: React.FC = () => {
     data: myMovie,
     error: myMovieError,
     isLoading: myMovieIsLoading,
-  } = useQuery(["myMovie"], () => getMovieByApiId.getOne(238));
+  } = useQuery<TMyMovie[]>(["myMovie"], () => getMovieByApiId.getOne(238));
 
   console.log(myMovie);
 
-  if (movieIsLoading) {
+  if (movieIsLoading || myMovieIsLoading) {
     return <div>Loading...</div>;
   }
 
@@ -86,12 +92,21 @@ const Movie: React.FC = () => {
             <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
           </button>
           <button onClick={handleSubmitFavourite(session)}>
-            <Image
-              src="/pictos/coeur-noir.png"
-              width={30}
-              height={30}
-              alt="not liked"
-            />
+            {myMovie[0].favourite ? (
+              <Image
+                src="/pictos/coeur.png"
+                width={30}
+                height={30}
+                alt="liked"
+              />
+            ) : (
+              <Image
+                src="/pictos/coeur-noir.png"
+                width={30}
+                height={30}
+                alt="not liked"
+              />
+            )}
           </button>
         </div>
         <Image
