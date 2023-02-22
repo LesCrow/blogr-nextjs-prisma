@@ -58,7 +58,6 @@ const Movies: React.FC<Props> = (props) => {
   if (moviesIsLoading || moviesTopeRatedIsLoading) {
     return <div>Loading....</div>;
   }
-  console.log(session);
 
   return (
     <Layout>

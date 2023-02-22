@@ -14,7 +14,7 @@ export const movieById = {
   getOne: async (id: number) =>
     (
       await axiosInstanceTmdb.get(
-        `/movie/${id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
+        `/movie/${id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits&language=fr-FR`
       )
     ).data,
 };
@@ -23,7 +23,7 @@ export const moviesByTopRated = {
   getAll: async () =>
     (
       await axiosInstanceTmdb.get(
-        `/movie/top_rated?api_key=${process.env.NEXT_PUBLIC_APIKEY}&language=en-US&page=1&append_to_response=credits`
+        `/movie/top_rated?api_key=${process.env.NEXT_PUBLIC_APIKEY}&language=fr-FR&page=1&append_to_response=credits`
       )
     ).data,
 };

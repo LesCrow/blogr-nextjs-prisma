@@ -2,7 +2,7 @@ import { NextApiResponse, NextApiRequest } from "next";
 import prisma from "../../../lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { method, query } = req;
+  const { method } = req;
   const { id } = req.query;
 
   switch (method) {
@@ -22,17 +22,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     case "PUT":
       try {
-        const { title, directorId, genreId, seen, year } = req.body;
+        const { alreadySeen, favourite } = req.body;
         const updatedMovie = await prisma.movie.update({
           where: {
             id: id as string,
           },
           data: {
-            title: title,
-            directorId: directorId,
-            genreId: genreId,
-            seen: seen,
-            year: year,
+            alreadySeen: alreadySeen,
+            favourite: favourite,
           },
         });
         res.status(200).json(updatedMovie);
