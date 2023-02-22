@@ -9,6 +9,7 @@ export const getMovieByApiId = {
 };
 
 export const movieFetcher = {
+  getAll: async () => (await axiosInstance.get<Movie>("movies")).data,
   post: async (api_id: number, alreadySeen: boolean, favourite: boolean) =>
     await axiosInstance.post<Movie>("movies", {
       api_id: api_id,

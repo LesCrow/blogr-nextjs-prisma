@@ -20,7 +20,7 @@ type TProps = {
   movies: Movie[];
 };
 
-const MovieList = (props: TProps) => {
+const MyList = (props: TProps) => {
   const api_ids: number[] = [];
   const [movies, setMovies] = useState([]);
   props.movies.map((movie) => api_ids.push(movie.api_id));
@@ -58,4 +58,4 @@ const MovieList = (props: TProps) => {
   );
 };
 
-export default MovieList;
+export default MyList;
