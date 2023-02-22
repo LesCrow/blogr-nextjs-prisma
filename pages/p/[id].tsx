@@ -10,7 +10,7 @@ import { getMovieByApiId, movieFetcher } from "../../utils/fetcher";
 import { useSession } from "next-auth/react";
 
 import "react-toastify/dist/ReactToastify.css";
-import { releaseDate } from "../../utils/constants";
+import { releaseDate, runtimeToHours } from "../../utils/constants";
 import Modal from "../../components/modal/Modal";
 import useModal from "../../components/modal/UseModal";
 import AddAMovie from "../../components/AddAmovie";
@@ -47,9 +47,11 @@ const Movie: React.FC = () => {
     ({ job }) => job === "Director"
   );
 
+  console.log(movie);
+
   return (
     <Layout>
-      <div className="flex flex-col items-center space-y-2 mt-8">
+      <div className="flex flex-col items-center space-y-2 mt-8 pb-8">
         {session && <AddAMovie />}
 
         <Image
@@ -58,17 +60,39 @@ const Movie: React.FC = () => {
           height={300}
           alt={movie.title}
         />
-
-        <h2 className="text-2xl">{movie.title}</h2>
-        <p>by {director[0].name}</p>
-        <p>{releaseDate(movie.release_date)}</p>
-        <div className="flex w-full justify-around">
+        <div>
+          <h2 className="text-3xl text-primary">{movie.title}</h2>
+          <p>by {director[0].name}</p>
+          <div className="flex justify-between">
+            <p>{releaseDate(movie.release_date)}</p>
+            <p>-</p>
+            <p>{runtimeToHours(movie.runtime)}</p>
+          </div>
+        </div>
+        <div className="w-[80%] flex flex-wrap pt-6">
           {movie.genres.map((genre) => (
-            <p key={genre.id}>{genre.name}</p>
+            <p
+              className="rounded-full bg-gray mb-4 mr-2 px-6 py-1 text-secondary"
+              key={genre.id}
+            >
+              {genre.name}
+            </p>
           ))}
         </div>
-        <p className="text-center">{movie.overview}</p>
-        <p>{movie.vote_average}</p>
+        <p className="py-2 px-6">{movie.overview}</p>
+        <div className="flex">
+          <Image src="/pictos/star.png" width={20} height={20} alt="star" />
+          <p className="ml-2">{movie.vote_average}</p>
+        </div>
+        <div className="flex">
+          <Image
+            src="/pictos/people.png"
+            width={20}
+            height={20}
+            alt="vote count"
+          />
+          <p className="ml-2">{movie.vote_count}</p>
+        </div>
       </div>
     </Layout>
   );

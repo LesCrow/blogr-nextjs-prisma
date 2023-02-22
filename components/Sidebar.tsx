@@ -10,8 +10,6 @@ export default function Sidebar() {
     setMenuOpen(!menuOpen);
   };
 
-  console.log(menuOpen);
-
   return (
     <Menu
       isOpen={menuOpen}

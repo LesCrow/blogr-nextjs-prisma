@@ -75,10 +75,7 @@ const Header: React.FC = () => {
 
   if (session) {
     right = (
-      <div className="flex w-full justify-between">
-        <p className="pl-2">
-          {session.user.name} <br /> ({session.user.email})
-        </p>
+      <div className="ml-auto flex">
         <button onClick={() => signOut()}>
           <Image
             src="/pictos/turn-off.png"
@@ -88,11 +85,24 @@ const Header: React.FC = () => {
           />
         </button>
       </div>
+      // <div className="flex w-full justify-between">
+      //   <p className="pl-2 border">
+      //     {session.user.name} <br /> ({session.user.email})
+      //   </p>
+      //   <button onClick={() => signOut()}>
+      //     <Image
+      //       src="/pictos/turn-off.png"
+      //       width={30}
+      //       height={30}
+      //       alt="Log out"
+      //     />
+      //   </button>
+      // </div>
     );
   }
 
   return (
-    <nav className="flex px-6 pt-6 pb-4 border-b-2 border-black bg-primary sticky top-0 ">
+    <nav className="min-h-[90px] flex px-6 pt-6 pb-4 border-b-2 border-black bg-primary sticky top-0 ">
       {left}
       {right}
     </nav>
