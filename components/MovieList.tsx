@@ -19,8 +19,8 @@ export default function MovieList({ movie }: Props) {
       <div className="mt-2">
         <h1 className="w-[150px] truncate">{movie.title}</h1>
         <div>
-          <p>{releaseDate(movie.release_date)}</p>
-          <p>{movie.vote_average}</p>
+          <p className="text-sm">{releaseDate(movie.release_date)}</p>
+          <p className="text-sm">{movie.vote_average}</p>
         </div>
       </div>
     </div>
