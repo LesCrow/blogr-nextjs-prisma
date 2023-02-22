@@ -12,17 +12,7 @@ const Header: React.FC = () => {
 
   const { data: session, status } = useSession();
 
-  let left = (
-    <div className="left">
-      <Image
-        className="cursor-pointer"
-        src="/pictos/mov.png"
-        width={50}
-        height={50}
-        alt="Menu"
-      />
-    </div>
-  );
+  let left = <div className="left"></div>;
 
   let right = null;
 
