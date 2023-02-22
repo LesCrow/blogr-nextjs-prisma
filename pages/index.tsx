@@ -61,7 +61,7 @@ const Movies: React.FC<Props> = (props) => {
 
   return (
     <Layout>
-      <main className={roboto.className}>
+      <main className={`w-full ${roboto.className}`}>
         <Image
           src="/pictos/logo.png"
           width={400}

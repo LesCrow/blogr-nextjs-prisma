@@ -20,14 +20,17 @@
     "next": "^13.1.6",
     "next-auth": "^4.19.2",
     "react": "^18.2.0",
+    "react-burger-menu": "^3.0.9",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
     "react-markdown": "8.0.0",
+    "react-menu-burger": "^1.0.0",
     "react-toastify": "^9.1.1"
   },
   "devDependencies": {
     "@types/node": "17.0.14",
     "@types/react": "17.0.38",
+    "@types/react-burger-menu": "^2.8.3",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",

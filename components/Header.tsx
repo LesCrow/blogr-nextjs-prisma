@@ -14,15 +14,13 @@ const Header: React.FC = () => {
 
   let left = (
     <div className="left">
-      <Link href="/">
-        <Image
-          className="cursor-pointer"
-          src="/pictos/mov.png"
-          width={50}
-          height={50}
-          alt="Menu"
-        />
-      </Link>
+      <Image
+        className="cursor-pointer"
+        src="/pictos/mov.png"
+        width={50}
+        height={50}
+        alt="Menu"
+      />
     </div>
   );
 
@@ -104,7 +102,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <nav className="flex px-6 pt-6 pb-4 border-b bg-[#fc6b32] ">
+    <nav className="flex px-6 pt-6 pb-4 border-b bg-[#fc6b32] sticky top-0 ">
       {left}
       {right}
     </nav>
