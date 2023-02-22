@@ -58,12 +58,11 @@ const Movies: React.FC<Props> = (props) => {
 
   const OnSubmit = (data: any) => {
     setQuery(data.query);
-    setQuery("");
   };
 
   return (
     <Layout>
-      <main className={`w-[90%] mx-auto mt-6 ${roboto.className}`}>
+      <main className={`w-[90%] mx-auto ${roboto.className}`}>
         <Image
           src="/pictos/logo.png"
           width={400}
@@ -72,16 +71,16 @@ const Movies: React.FC<Props> = (props) => {
           className="mx-auto "
         />
         <form
-          className="flex flex-col space-y-2"
+          className="flex flex-col space-y-4"
           onSubmit={handleSubmit(OnSubmit)}
         >
           <input
-            className="rounded-full h-8 px-4 mt-4 text-center border border-black shadow-md"
+            className="rounded-full h-8 px-4 text-center text-black border border-black"
             placeholder="Recherchez..."
             {...register("query")}
           />
           <button
-            className="border border-blue-600 bg-blue-400 text-white  rounded-full w-fit px-4 py-1 mx-auto"
+            className="bg-[#292E35] text-[#5799EF] rounded-full w-fit px-6 py-1 mx-auto"
             type="submit"
           >
             Search
@@ -90,7 +89,9 @@ const Movies: React.FC<Props> = (props) => {
 
         {query === "" ? (
           <div className="mt-10">
-            <h1 className="w-fit mb-6 mx-auto text-2xl">Les mieux notés</h1>
+            <h1 className="w-fit mb-6 mx-auto text-2xl text-primary">
+              Les mieux notés
+            </h1>
             <div className="flex flex-wrap justify-between w-full">
               {moviesTopRated.results.map((movie: MovieProps) => (
                 <Link href={`p/${movie.id}`} key={movie.id}>

@@ -19,7 +19,7 @@
 
 /* Color/shape of close button cross */
 .bm-cross {
-  background: #ffffff;
+  background: #000000;
 }
 
 /*
@@ -40,7 +40,7 @@
 
 /* Wrapper for item list */
 .bm-item-list {
-  color: #ffffff;
+  color: #000000;
   padding: 0.8em;
 }
 

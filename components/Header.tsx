@@ -92,7 +92,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <nav className="flex px-6 pt-6 pb-4 border-b bg-[#fc6b32] sticky top-0 ">
+    <nav className="flex px-6 pt-6 pb-4 border-b-2 border-black bg-primary sticky top-0 ">
       {left}
       {right}
     </nav>
