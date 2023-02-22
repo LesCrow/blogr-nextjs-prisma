@@ -61,24 +61,24 @@ const Movies: React.FC<Props> = (props) => {
 
   return (
     <Layout>
-      <main className={`w-full ${roboto.className}`}>
+      <main className={`w-[90%] mx-auto mt-6 ${roboto.className}`}>
         <Image
           src="/pictos/logo.png"
           width={400}
           height={100}
           alt="MOOOVIES"
-          className="mx-auto"
+          className="mx-auto "
         />
         <form
           className="flex flex-col space-y-2"
           onSubmit={handleSubmit(OnSubmit)}
         >
           <input
-            className="rounded-full h-8 px-4 mt-4"
+            className="rounded-full h-8 px-4 mt-4 border border-black shadow-md"
             {...register("query")}
           />
           <button
-            className="border border-blue-600 bg-blue-400 text-white rounded-full w-fit px-4 py-1 mx-auto"
+            className="border border-blue-600 bg-blue-400 text-white  rounded-full w-fit px-4 py-1 mx-auto"
             type="submit"
           >
             Search
