@@ -8,11 +8,12 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { getMovieByApiId, movieFetcher } from "../../utils/fetcher";
 import { useSession } from "next-auth/react";
-import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { releaseDate } from "../../utils/constants";
 import Modal from "../../components/modal/Modal";
 import useModal from "../../components/modal/UseModal";
+import AddAMovie from "../../components/AddAmovie";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -26,23 +27,11 @@ import useModal from "../../components/modal/UseModal";
 //   };
 // };
 
-type TMyMovie = {
-  id: string;
-  api_id: number;
-  already_seen: boolean;
-  favourite: boolean;
-};
-
 const Movie: React.FC = () => {
-  const router = useRouter();
   const { data: session, status } = useSession();
+  const router = useRouter();
   const { id } = router.query;
   const idToNumber = parseInt(id as string);
-  const notify = () => toast("Veuillez vous connectez");
-  const { isShowing, toggle } = useModal();
-
-  const [data, setData] = useState<TMyMovie[]>([]);
-  const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
   const {
     data: movie,
@@ -50,50 +39,9 @@ const Movie: React.FC = () => {
     isLoading: movieIsLoading,
   } = useQuery<MovieProps>(["movie"], () => movieById.getOne(idToNumber));
 
-  const {
-    data: myMovie,
-    error: myMovieError,
-    isLoading: myMovieIsLoading,
-  } = useQuery<TMyMovie[]>(
-    ["myMovie"],
-    async () => await getMovieByApiId.getOne(idToNumber)
-  );
-
-  useEffect(() => {
-    if (myMovie) {
-      setData(myMovie);
-    }
-  }, [myMovie]);
-
-  if (movieIsLoading || myMovieIsLoading) {
+  if (movieIsLoading) {
     return <div>Loading...</div>;
   }
-
-  const onClickAdd = (session: object) => {
-    if (session) {
-      return toggle;
-    }
-    return notify;
-  };
-
-  const handleSubmitMovieList = (
-    id: number,
-    alreadySeen: boolean,
-    favourite: boolean
-  ) => {
-    movieFetcher.post(id, alreadySeen, favourite);
-  };
-
-  const handleSubmitFavouriteState = () => {};
-
-  const handleSubmitFavourite = (
-    id: string,
-    favourite: boolean,
-    alreadySeen: boolean
-  ) => {
-    console.log(isFavourite);
-    movieFetcher.update(id, alreadySeen, favourite);
-  };
 
   const director: DirectorProps[] = movie.credits.crew.filter(
     ({ job }) => job === "Director"
@@ -101,40 +49,9 @@ const Movie: React.FC = () => {
 
   return (
     <Layout>
-      <ToastContainer position="top-center" />
+      <div className="flex flex-col items-center space-y-4 mt-4">
+        {session && <AddAMovie />}
 
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex w-full justify-around mb-4">
-          <button onClick={onClickAdd(session)}>
-            <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
-          </button>
-          <button
-            onClick={() => {
-              setIsFavourite(!isFavourite);
-              handleSubmitFavourite(
-                myMovie[0].id,
-                isFavourite,
-                myMovie[0].already_seen
-              );
-            }}
-          >
-            {myMovie[0].favourite ? (
-              <Image
-                src="/pictos/coeur.png"
-                width={30}
-                height={30}
-                alt="liked"
-              />
-            ) : (
-              <Image
-                src="/pictos/coeur-noir.png"
-                width={30}
-                height={30}
-                alt="not liked"
-              />
-            )}
-          </button>
-        </div>
         <Image
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           width={200}
@@ -152,24 +69,6 @@ const Movie: React.FC = () => {
         </div>
         <p className="text-center">{movie.overview}</p>
         <p>{movie.vote_average}</p>
-        <Modal isShowing={isShowing} hide={toggle} title="Ajouter à ma liste">
-          <div className="flex flex-col space-y-5">
-            <button
-              onClick={() => {
-                handleSubmitMovieList(idToNumber, true, false);
-              }}
-            >
-              A Voir
-            </button>
-            <button
-              onClick={() => {
-                handleSubmitMovieList(idToNumber, false, false);
-              }}
-            >
-              Déjà vu
-            </button>
-          </div>
-        </Modal>
       </div>
     </Layout>
   );
