@@ -67,7 +67,7 @@ const Movies: React.FC<Props> = (props) => {
           width={400}
           height={100}
           alt="MOOOVIES"
-          className="mx-auto mt-6"
+          className="mx-auto"
         />
         <form
           className="flex flex-col space-y-2"
