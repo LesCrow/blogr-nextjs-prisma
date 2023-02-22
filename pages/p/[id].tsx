@@ -118,7 +118,7 @@ const Movie: React.FC = () => {
               );
             }}
           >
-            {myMovie[0].favourite && isFavourite ? (
+            {myMovie[0].favourite ? (
               <Image
                 src="/pictos/coeur.png"
                 width={30}
