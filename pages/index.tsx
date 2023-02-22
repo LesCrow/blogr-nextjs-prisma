@@ -80,7 +80,7 @@ const Movies: React.FC<Props> = (props) => {
             {...register("query")}
           />
           <button
-            className="bg-[#292E35] text-[#5799EF] rounded-full w-fit px-6 py-1 mx-auto"
+            className="bg-[#292E35] text-secondary rounded-full w-fit px-6 py-1 mx-auto"
             type="submit"
           >
             Search

@@ -1,5 +1,11 @@
 export const releaseDate = (release_date: string) => {
-  return new Date(release_date).toLocaleDateString();
+  return new Date(release_date).getFullYear();
+};
+
+export const runtimeToHours = (runtime: number) => {
+  const hours = Math.floor(runtime / 60);
+  const minutes = runtime % 60;
+  return `${hours}h ${minutes}min`;
 };
 
 export const srcImage = (url: string) => {

@@ -85,7 +85,7 @@ export default function AddAmovie() {
             );
           }}
         >
-          {myMovie[0].favourite ? (
+          {myMovie[0] !== undefined && myMovie[0].favourite ? (
             <Image src="/pictos/coeur.png" width={30} height={30} alt="liked" />
           ) : (
             <Image
@@ -99,6 +99,7 @@ export default function AddAmovie() {
         <Modal isShowing={isShowing} hide={toggle} title="Ajouter à ma liste">
           <div className="flex flex-col space-y-5">
             <button
+              className="text-black"
               onClick={() => {
                 handleSubmitMovieList(idToNumber, true, false);
               }}
@@ -106,6 +107,7 @@ export default function AddAmovie() {
               A Voir
             </button>
             <button
+              className="text-black"
               onClick={() => {
                 handleSubmitMovieList(idToNumber, false, false);
               }}
