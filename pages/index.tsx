@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import prisma from "../lib/prisma";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
@@ -37,9 +37,6 @@ const Movies: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
   const { register, handleSubmit } = useForm();
   const [query, setQuery] = useState("");
-  const OnSubmit = (data: any) => {
-    setQuery(data.query);
-  };
 
   const {
     data: moviesTopRated,
@@ -59,6 +56,11 @@ const Movies: React.FC<Props> = (props) => {
     return <div>Loading....</div>;
   }
 
+  const OnSubmit = (data: any) => {
+    setQuery(data.query);
+    setQuery("");
+  };
+
   return (
     <Layout>
       <main className={`w-[90%] mx-auto mt-6 ${roboto.className}`}>
@@ -74,7 +76,8 @@ const Movies: React.FC<Props> = (props) => {
           onSubmit={handleSubmit(OnSubmit)}
         >
           <input
-            className="rounded-full h-8 px-4 mt-4 border border-black shadow-md"
+            className="rounded-full h-8 px-4 mt-4 text-center border border-black shadow-md"
+            placeholder="Recherchez..."
             {...register("query")}
           />
           <button
