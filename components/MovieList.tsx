@@ -9,18 +9,18 @@ type Props = {
 
 export default function MovieList({ movie }: Props) {
   return (
-    <div className="flex shadow-lg bg-white border border-black rounded-md mb-4 p-4">
+    <div className="w-full mb-10">
       <Image
         src={srcImage(movie.poster_path)}
-        width={100}
-        height={150}
+        width={150}
+        height={300}
         alt={movie.title}
       />
-      <div className="w-full px-2 text-center flex flex-col justify-between ">
-        <h1 className="text-xl">{movie.title}</h1>
+      <div className="mt-2">
+        <h1 className="w-[150px] truncate">{movie.title}</h1>
         <div>
-          <p>{releaseDate(movie.release_date)}</p>
-          <p>{movie.vote_average}</p>
+          <p className="text-sm">{releaseDate(movie.release_date)}</p>
+          <p className="text-sm">{movie.vote_average}</p>
         </div>
       </div>
     </div>

@@ -62,12 +62,21 @@ const Movies: React.FC<Props> = (props) => {
   return (
     <Layout>
       <main className={roboto.className}>
-        <Image src="/pictos/logo.png" width={400} height={100} alt="MOOOVIES" />
+        <Image
+          src="/pictos/logo.png"
+          width={400}
+          height={100}
+          alt="MOOOVIES"
+          className="mx-auto mt-6"
+        />
         <form
           className="flex flex-col space-y-2"
           onSubmit={handleSubmit(OnSubmit)}
         >
-          <input className="rounded-full h-8 px-4" {...register("query")} />
+          <input
+            className="rounded-full h-8 px-4 mt-4"
+            {...register("query")}
+          />
           <button
             className="border border-blue-600 bg-blue-400 text-white rounded-full w-fit px-4 py-1 mx-auto"
             type="submit"
@@ -75,27 +84,33 @@ const Movies: React.FC<Props> = (props) => {
             Search
           </button>
         </form>
+
         {query === "" ? (
-          <div className="pt-6">
-            {moviesTopRated.results.map((movie: MovieProps) => (
-              <Link href={`p/${movie.id}`} key={movie.id}>
-                <MovieList key={movie.id} movie={movie} />
-              </Link>
-            ))}
+          <div className="mt-10">
+            <h1 className="w-fit mb-6 mx-auto text-2xl">Les mieux notés</h1>
+            <div className="flex flex-wrap justify-between w-full">
+              {moviesTopRated.results.map((movie: MovieProps) => (
+                <Link href={`p/${movie.id}`} key={movie.id}>
+                  <MovieList key={movie.id} movie={movie} />
+                </Link>
+              ))}
+            </div>
           </div>
         ) : (
-          <div className="pt-6">
-            {movies.results.map((movie: MovieProps) => (
-              <Link href={`p/${movie.id}`} key={movie.id}>
-                <MovieList key={movie.id} movie={movie} />
-              </Link>
-            ))}
+          <div className="mt-10">
+            <div className="flex flex-wrap justify-between w-full">
+              {movies.results.map((movie: MovieProps) => (
+                <Link href={`p/${movie.id}`} key={movie.id}>
+                  <MovieList key={movie.id} movie={movie} />
+                </Link>
+              ))}
+            </div>
           </div>
         )}
 
         {session ? (
           <>
-            <div className="flex justify-between">
+            <div className="flex flex-wrap justify-between w-full">
               <Link href="/mymovies">My movie list</Link>
             </div>
           </>

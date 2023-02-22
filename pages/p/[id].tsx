@@ -49,7 +49,7 @@ const Movie: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col items-center space-y-4 mt-4">
+      <div className="flex flex-col items-center space-y-2 mt-8">
         {session && <AddAMovie />}
 
         <Image
@@ -59,10 +59,10 @@ const Movie: React.FC = () => {
           alt={movie.title}
         />
 
-        <h2>{movie.title}</h2>
+        <h2 className="text-2xl">{movie.title}</h2>
         <p>by {director[0].name}</p>
         <p>{releaseDate(movie.release_date)}</p>
-        <div className="flex w-full justify-between">
+        <div className="flex w-full justify-around">
           {movie.genres.map((genre) => (
             <p key={genre.id}>{genre.name}</p>
           ))}
