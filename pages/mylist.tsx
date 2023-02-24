@@ -23,6 +23,7 @@ const MyMovieList = (props: TProps) => {
   const api_idsToWatch = [];
   const [toWatchOpen, setToWatchOpen] = useState(false);
   const [alreadySeenOpen, setAlreadySeenOpen] = useState(false);
+  const [myListOpen, setMyListOpen] = useState(true);
   const [movies, setMovies] = useState([]);
   const [moviesAlreadySeen, setMoviesAlreadySeen] = useState([]);
   const [moviesToWatch, setMoviesToWatch] = useState([]);
@@ -87,17 +88,25 @@ const MyMovieList = (props: TProps) => {
     fetchMoviesNotSeen(api_idsToWatch);
   }, []);
 
+  const handleclickMyList = () => {
+    setMyListOpen(!myListOpen);
+  };
+
   const handleClickAlreadySeen = () => {
     setAlreadySeenOpen(!alreadySeenOpen);
+    if (myListOpen) {
+      setMyListOpen(false);
+    }
     if (toWatchOpen) {
       setToWatchOpen(false);
     }
   };
 
-  console.log(toWatchOpen, alreadySeenOpen);
-
   const handleClickToWatch = () => {
     setToWatchOpen(!toWatchOpen);
+    if (myListOpen) {
+      setMyListOpen(false);
+    }
     if (alreadySeenOpen) {
       setAlreadySeenOpen(false);
     }
@@ -106,6 +115,8 @@ const MyMovieList = (props: TProps) => {
   if (myMoviesIsLoading) {
     return <div>Loading...</div>;
   }
+
+  console.log(myListOpen);
 
   myMovies.map((movie) => api_ids.push(movie.api_id));
   myMovies.filter((movie) =>
@@ -116,16 +127,21 @@ const MyMovieList = (props: TProps) => {
 
   return (
     <div className="mt-10 w-[90%] mx-auto">
-      <h1 className="w-fit mb-6 mx-auto text-2xl text-primary">MA LISTE</h1>
+      <button
+        className="w-full mb-6 mx-auto text-2xl text-primary"
+        onClick={handleclickMyList}
+      >
+        MA LISTE
+      </button>
       <div className="flex justify-around">
         <button
-          className={alreadySeenOpen ? `text-white` : `text-gray`}
+          className={myListOpen || toWatchOpen ? `text-white` : `text-gray`}
           onClick={handleClickToWatch}
         >
           A voir
         </button>
         <button
-          className={toWatchOpen ? `text-white` : `text-gray`}
+          className={myListOpen || alreadySeenOpen ? `text-white` : `text-gray`}
           onClick={handleClickAlreadySeen}
         >
           Déjà vu
@@ -133,8 +149,7 @@ const MyMovieList = (props: TProps) => {
       </div>
 
       <div className="flex flex-wrap justify-between w-full mt-8">
-        {!alreadySeenOpen &&
-          !toWatchOpen &&
+        {myListOpen &&
           movies.map((movie) => (
             <Link key={movie.id} href={`p/${movie.id}`}>
               <MovieList movie={movie} />
