@@ -26,12 +26,6 @@ const MyMovieList = (props: TProps) => {
   const [movies, setMovies] = useState([]);
   const [moviesAlreadySeen, setMoviesAlreadySeen] = useState([]);
   const [moviesToWatch, setMoviesToWatch] = useState([]);
-  myMovies.map((movie) => api_ids.push(movie.api_id));
-  myMovies.filter((movie) =>
-    movie.alreadySeen
-      ? api_idsAlreadySeen.push(movie.api_id)
-      : api_idsToWatch.push(movie.api_id)
-  );
 
   const fetchMovies = async (api_ids: number[]) => {
     const promises = api_ids.map((api_id) =>
@@ -70,7 +64,7 @@ const MyMovieList = (props: TProps) => {
   };
 
   useEffect(() => {
-    fetchMoviesNotSeen(api_idsToWatch);
+    fetchMoviesAlreadySeen(api_idsAlreadySeen);
   }, []);
 
   const fetchMoviesNotSeen = async (api_idsNotSeen: number[]) => {
@@ -100,11 +94,20 @@ const MyMovieList = (props: TProps) => {
     setToWatchOpen(!toWatchOpen);
   };
 
-  console.log(alreadySeenOpen, toWatchOpen);
+  if (myMoviesIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  myMovies.map((movie) => api_ids.push(movie.api_id));
+  myMovies.filter((movie) =>
+    movie.alreadySeen
+      ? api_idsAlreadySeen.push(movie.api_id)
+      : api_idsToWatch.push(movie.api_id)
+  );
 
   return (
     <div className="mt-10 w-[90%] mx-auto">
-      <h1 className="w-fit mb-6 mx-auto text-2xl text-primary">Ma liste</h1>
+      <h1 className="w-fit mb-6 mx-auto text-2xl text-primary">MA LISTE</h1>
       <div className="flex justify-around">
         <button onClick={handleClickToWatch}>A voir</button>
         <button onClick={handleClickAlreadySeen}>Déjà vu</button>

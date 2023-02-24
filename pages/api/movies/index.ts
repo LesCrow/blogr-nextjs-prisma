@@ -31,23 +31,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       break;
 
-    // case "POST":
-    //   try {
-    //     const { api_id, toWatch, favourite } = req.body;
+    case "POST":
+      try {
+        const { api_id, alreadySeen, favourite } = req.body;
 
-    //     const newBook = await prisma.movie.create({
-    //       data: {
-    //         api_id: api_id,
-    //         toWatch: toWatch,
-    //         favourite: favourite,
-    //       },
-    //     });
-    //     res.status(200).json(newBook);
-    //   } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json({ message: error });
-    //   }
-    //   break;
+        const newBook = await prisma.movie.create({
+          data: {
+            api_id: api_id,
+            alreadySeen: alreadySeen,
+            favourite: favourite,
+          },
+        });
+        res.status(200).json(newBook);
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error });
+      }
+      break;
 
     default:
       res.status(405).end(`Method ${method} Not Allowed`);
