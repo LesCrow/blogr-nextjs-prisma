@@ -12,26 +12,21 @@ datasource db {
 
 model Movie {
   id String @default(cuid()) @id
-  title String
-  director Director @relation(fields: [directorId], references: [id])
-  directorId String
-  genre Genre @relation(fields: [genreId], references: [id])
-  genreId String
-  year DateTime ?
-  seen Boolean
+  api_id Int @unique
+  favourite Boolean @default(false)
+  alreadySeen Boolean @default(false)
 
 }
 
 model Director {
   id String @default(cuid()) @id
-  name String
-  movies Movie[]
+  api_id Int @unique
 }
 
 model Genre {
   id String @default(cuid()) @id
   name String @unique
-  movies Movie[]
+  url String @unique
 }
 
 
@@ -39,7 +34,48 @@ model User {
   id            String       @default(cuid()) @id
   name          String?
   email         String?   @unique
+  emailVerified DateTime?
+  image String?
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  accounts      Account[]
+  sessions      Session[]
   @@map(name: "users")
+}
+
+model Account {
+  id String @id @default(cuid())
+  userId String @map("user_id")
+  type String
+  provider String
+  providerAccountId String @map("provider_account_id")
+  refresh_token String?
+  access_token String?
+  expires_at Int?
+  token_type String?
+  scope String?
+  id_token String?
+  session_state String?
+  oauth_token_secret String?
+  oauth_token String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id String @id @default(cuid())
+  sessionToken String @unique@map("session_token")
+  userId String @map("user_id")
+  expires DateTime
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id Int @id @default(autoincrement())
+  identifier String
+  token String @unique
+  expires DateTime
+
+  @@unique([identifier, token])
 }

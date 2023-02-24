@@ -1,57 +1,117 @@
-import React from "react";
-import prisma from "../lib/prisma";
+import React, { useState } from "react";
 import { GetStaticProps } from "next";
-import Layout from "../components/Layout";
-import Movie, { MovieProps } from "../components/Movie";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Movie, Movie as TMovie } from "@prisma/client";
+import { useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
+import { movieByString, moviesByTopRated } from "../utils/tmdbFetcher";
+import { MovieProps } from "../utils/globalTypes";
+import Image from "next/image";
+import { Roboto } from "@next/font/google";
+import MovieList from "../components/MovieCard";
+import MovieCard from "../components/MovieCard";
 
-export const getStaticProps: GetStaticProps = async () => {
-  const movies = await prisma.movie.findMany({
-    include: {
-      director: {
-        select: { name: true },
-      },
-    },
-  });
+// export const getStaticProps: GetStaticProps = async () => {
+//   const movies = await prisma.movie.findMany();
 
-  return {
-    props: { movies },
-    revalidate: 10,
-  };
-};
+//   return {
+//     props: { movies },
+//     revalidate: 10,
+//   };
+// };
+
+const roboto = Roboto({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 type Props = {
-  movies: MovieProps[];
+  movies: TMovie[];
+};
+type arrayMovieProps = {
+  results: [MovieProps];
 };
 
-const Blog: React.FC<Props> = (props) => {
+const Movies: React.FC<Props> = (props) => {
+  const { data: session, status } = useSession();
+  const { register, handleSubmit } = useForm();
+  const [query, setQuery] = useState("");
+
+  const {
+    data: moviesTopRated,
+    error: moviesTopRatedError,
+    isLoading: moviesTopeRatedIsLoading,
+  } = useQuery<arrayMovieProps>(["moviesTopRated"], () =>
+    moviesByTopRated.getAll()
+  );
+
+  const {
+    data: movies,
+    error: moviesError,
+    isLoading: moviesIsLoading,
+  } = useQuery<arrayMovieProps>(["movies"], () => movieByString.getAll(query));
+
+  if (moviesIsLoading || moviesTopeRatedIsLoading) {
+    return <div>Loading....</div>;
+  }
+
+  const OnSubmit = (data: any) => {
+    setQuery(data.query);
+  };
+
   return (
-    <Layout>
-      <div className="page">
-        <h1>Movie List</h1>
-        <main>
-          {props.movies.map((movie) => (
-            <div key={movie.id} className="movie">
-              <Movie movie={movie} />
-            </div>
-          ))}
-        </main>
-      </div>
-      <style jsx>{`
-        .movie {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
+    <main className={`w-[90%] mx-auto ${roboto.className}`}>
+      <Image
+        src="/pictos/logo.png"
+        width={400}
+        height={100}
+        alt="MOOOVIES"
+        className="mx-auto "
+      />
+      <form
+        className="flex flex-col space-y-4"
+        onSubmit={handleSubmit(OnSubmit)}
+      >
+        <input
+          className="rounded-full h-8 px-4 text-center text-black border border-black"
+          placeholder="Recherchez..."
+          {...register("query")}
+        />
+        <button
+          className="bg-[#292E35] text-secondary rounded-full w-fit px-6 py-1 mx-auto"
+          type="submit"
+        >
+          Search
+        </button>
+      </form>
 
-        .movie:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .movie + .movie {
-          margin-top: 2rem;
-        }
-      `}</style>
-    </Layout>
+      {query === "" ? (
+        <div className="mt-10">
+          <h1 className="w-fit mb-6 mx-auto text-2xl text-primary">
+            Les mieux notés
+          </h1>
+          <div className="flex flex-wrap justify-between w-full">
+            {moviesTopRated.results.map((movie: MovieProps) => (
+              <Link href={`p/${movie.id}`} key={movie.id}>
+                <MovieCard key={movie.id} movie={movie} />
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-10">
+          <div className="flex flex-wrap justify-between w-full">
+            {movies.results.map((movie: MovieProps) => (
+              <Link href={`p/${movie.id}`} key={movie.id}>
+                <MovieList key={movie.id} movie={movie} />
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </main>
   );
 };
 
-export default Blog;
+export default Movies;
