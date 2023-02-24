@@ -8,7 +8,7 @@ type Props = {
   movie: MovieProps;
 };
 
-export default function MovieList({ movie }: Props) {
+export default function MovieCard({ movie }: Props) {
   return (
     <div className="w-full mb-10 border border-[#1A1A1A]">
       <Image

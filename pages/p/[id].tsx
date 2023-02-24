@@ -6,13 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { getMovieByApiId, movieFetcher } from "../../utils/fetcher";
 import { useSession } from "next-auth/react";
 
 import "react-toastify/dist/ReactToastify.css";
 import { releaseDate, runtimeToHours } from "../../utils/constants";
-import Modal from "../../components/modal/Modal";
-import useModal from "../../components/modal/UseModal";
 import AddAMovie from "../../components/AddAmovie";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
