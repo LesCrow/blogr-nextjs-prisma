@@ -60,13 +60,11 @@ export default function AddAmovie() {
     movieFetcher.post(id, alreadySeen, favourite);
   };
 
-  const handleSubmitFavourite = (
-    id: string,
-    favourite: boolean,
-    alreadySeen: boolean
-  ) => {
-    movieFetcher.update(id, alreadySeen, favourite);
+  const handleSubmitFavourite = (id: string, favourite: boolean) => {
+    movieFetcher.update(id, favourite);
   };
+
+  console.log(isFavourite);
 
   return (
     <>
@@ -78,18 +76,14 @@ export default function AddAmovie() {
         <button
           onClick={() => {
             setIsFavourite(!isFavourite);
-            handleSubmitFavourite(
-              myMovie[0].id,
-              isFavourite,
-              myMovie[0].already_seen
-            );
+            handleSubmitFavourite(myMovie[0].id, isFavourite);
           }}
         >
           {myMovie[0] !== undefined && myMovie[0].favourite ? (
             <Image src="/pictos/coeur.png" width={30} height={30} alt="liked" />
           ) : (
             <Image
-              src="/pictos/coeur-noir.png"
+              src="/pictos/contour-en-forme-de-coeur-blanc.png"
               width={30}
               height={30}
               alt="not liked"

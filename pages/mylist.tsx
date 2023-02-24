@@ -27,6 +27,7 @@ const MyMovieList = (props: TProps) => {
   const [movies, setMovies] = useState([]);
   const [moviesAlreadySeen, setMoviesAlreadySeen] = useState([]);
   const [moviesToWatch, setMoviesToWatch] = useState([]);
+  const [moviesFavourite, setMoviesFavourite] = useState([]);
 
   const fetchMovies = async (api_ids: number[]) => {
     const promises = api_ids.map((api_id) =>
@@ -147,7 +148,7 @@ const MyMovieList = (props: TProps) => {
           Déjà vu
         </button>
       </div>
-
+      <button className="mx-auto w-full">Favoris</button>
       <div className="flex flex-wrap justify-between w-full mt-8">
         {myListOpen &&
           movies.map((movie) => (

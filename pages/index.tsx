@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import prisma from "../lib/prisma";
+import React, { useState } from "react";
 import { GetStaticProps } from "next";
-import Layout from "../components/Layout";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Movie, Movie as TMovie } from "@prisma/client";
@@ -12,8 +10,7 @@ import { MovieProps } from "../utils/globalTypes";
 import Image from "next/image";
 import { Roboto } from "@next/font/google";
 import MovieList from "../components/MovieCard";
-
-import { movieFetcher } from "../utils/fetcher";
+import MovieCard from "../components/MovieCard";
 
 // export const getStaticProps: GetStaticProps = async () => {
 //   const movies = await prisma.movie.findMany();
@@ -53,7 +50,7 @@ const Movies: React.FC<Props> = (props) => {
     data: movies,
     error: moviesError,
     isLoading: moviesIsLoading,
-  } = useQuery<arrayMovieProps>(["movies"], () => movieByString.getOne(query));
+  } = useQuery<arrayMovieProps>(["movies"], () => movieByString.getAll(query));
 
   if (moviesIsLoading || moviesTopeRatedIsLoading) {
     return <div>Loading....</div>;
@@ -97,7 +94,7 @@ const Movies: React.FC<Props> = (props) => {
           <div className="flex flex-wrap justify-between w-full">
             {moviesTopRated.results.map((movie: MovieProps) => (
               <Link href={`p/${movie.id}`} key={movie.id}>
-                <MovieList key={movie.id} movie={movie} />
+                <MovieCard key={movie.id} movie={movie} />
               </Link>
             ))}
           </div>

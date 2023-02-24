@@ -1,14 +1,27 @@
-import { Movie } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
 import { releaseDate, srcImage } from "../utils/constants";
-import { DirectorProps, MovieProps } from "../utils/globalTypes";
+import { getMovieByApiId } from "../utils/fetcher";
+import { MovieProps } from "../utils/globalTypes";
 
 type Props = {
   movie: MovieProps;
 };
 
 export default function MovieCard({ movie }: Props) {
+  const {
+    data: myMovie,
+    isLoading: myMovieIsLoading,
+    error: myMovieError,
+  } = useQuery(["myMovie"], () => getMovieByApiId.getOne(movie.id));
+
+  if (myMovieIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log(movie.id);
+
   return (
     <div className="w-full mb-10 border border-[#1A1A1A]">
       <Image
