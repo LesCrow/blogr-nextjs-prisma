@@ -2,9 +2,7 @@ import axios from "axios";
 
 const fetchClient = () => {
   const defaultOptions = {
-    baseURL:
-      process.env.NEXT_PUBLIC_SERVER_URL ||
-      process.env.NEXT_PUBLIC_SERVER_URL_PRODUCTION,
+    baseURL: process.env.NEXT_PUBLIC_SERVER_URL || "SERVER_URL",
   };
 
   // Create instance
