@@ -4,7 +4,7 @@ const fetchClient = () => {
   const defaultOptions = {
     baseURL:
       process.env.NEXT_PUBLIC_SERVER_URL_DEVELOPPMENT ||
-      process.env.NEXT_PUBLIC_URL,
+      process.env.NEXT_PUBLIC_SERVER_URL,
   };
 
   // Create instance
