@@ -2,7 +2,7 @@ import { ParsedUrlQuery } from "querystring";
 import axiosInstanceTmdb from "./axiosInstanceTmdb";
 
 export const movieByString = {
-  getOne: async (query: string) =>
+  getAll: async (query: string) =>
     (
       await axiosInstanceTmdb.get(
         `/search/movie?api_key=${process.env.NEXT_PUBLIC_APIKEY}&query=${query}`
