@@ -18,6 +18,8 @@ const MyMovieList = (props: TProps) => {
     isLoading: myMoviesIsLoading,
   } = useQuery<Movie[]>(["myMovies"], async () => movieFetcher.getAll());
 
+  console.log(myMovies);
+
   const api_ids: number[] = [];
   const api_idsAlreadySeen = [];
   const api_idsToWatch = [];
@@ -116,8 +118,6 @@ const MyMovieList = (props: TProps) => {
   if (myMoviesIsLoading) {
     return <div>Loading...</div>;
   }
-
-  console.log(myListOpen);
 
   myMovies.map((movie) => api_ids.push(movie.api_id));
   myMovies.filter((movie) =>

@@ -10,17 +10,15 @@ type Props = {
 };
 
 export default function MovieCard({ movie }: Props) {
-  const {
-    data: myMovie,
-    isLoading: myMovieIsLoading,
-    error: myMovieError,
-  } = useQuery(["myMovie"], () => getMovieByApiId.getOne(movie.id));
+  // const {
+  //   data: myMovie,
+  //   isLoading: myMovieIsLoading,
+  //   error: myMovieError,
+  // } = useQuery(["myMovie"], () => getMovieByApiId.getOne(movie.id));
 
-  if (myMovieIsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  console.log(movie.id);
+  // if (myMovieIsLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="w-full mb-10 border border-[#1A1A1A]">
