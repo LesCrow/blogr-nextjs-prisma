@@ -64,8 +64,6 @@ export default function AddAmovie() {
     movieFetcher.update(id, favourite);
   };
 
-  console.log(isFavourite);
-
   return (
     <>
       <ToastContainer position="top-center" />

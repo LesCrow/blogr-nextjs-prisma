@@ -44,8 +44,6 @@ const Movie: React.FC = () => {
     ({ job }) => job === "Director"
   );
 
-  console.log(movie);
-
   return (
     <div className="flex flex-col items-center space-y-2 mt-8 pb-8">
       {session && <AddAMovie />}
