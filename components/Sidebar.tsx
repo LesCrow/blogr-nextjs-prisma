@@ -29,7 +29,7 @@ export default function Sidebar() {
           HOME
         </Link>
         <br />
-        <Link onClick={handleCloseMenu} href="/mylist">
+        <Link onClick={handleCloseMenu} href="/mymovies">
           MA LISTE
         </Link>
       </div>
