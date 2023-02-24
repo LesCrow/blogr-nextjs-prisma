@@ -72,7 +72,7 @@ const MyMovieList = (props: TProps) => {
     fetchMoviesAlreadySeen(api_idsAlreadySeen);
   }, []);
 
-  const fetchMoviesNotSeen = async (api_idsNotSeen: number[]) => {
+  const fetchMoviesTowatch = async (api_idsNotSeen: number[]) => {
     const promises = api_idsNotSeen.map((api_id) =>
       axios.get(
         `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
@@ -89,7 +89,7 @@ const MyMovieList = (props: TProps) => {
   };
 
   useEffect(() => {
-    fetchMoviesNotSeen(api_idsToWatch);
+    fetchMoviesTowatch(api_idsToWatch);
   }, []);
 
   const fetchMoviesFavourite = async (api_idsFavourite: number[]) => {
@@ -114,7 +114,7 @@ const MyMovieList = (props: TProps) => {
 
   // Handle click
   const handleclickMyList = () => {
-    setMyListOpen(!myListOpen);
+    setMyListOpen(true);
     if (alreadySeenOpen) {
       setAlreadySeenOpen(false);
     }
@@ -182,6 +182,8 @@ const MyMovieList = (props: TProps) => {
       api_idsFavourite.push(movie.api_id);
     }
   });
+
+  console.log(moviesToWatch);
 
   return (
     <div className="mt-10 w-[90%] mx-auto">
