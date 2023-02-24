@@ -89,9 +89,18 @@ const MyMovieList = (props: TProps) => {
 
   const handleClickAlreadySeen = () => {
     setAlreadySeenOpen(!alreadySeenOpen);
+    if (toWatchOpen) {
+      setToWatchOpen(false);
+    }
   };
+
+  console.log(toWatchOpen, alreadySeenOpen);
+
   const handleClickToWatch = () => {
     setToWatchOpen(!toWatchOpen);
+    if (alreadySeenOpen) {
+      setAlreadySeenOpen(false);
+    }
   };
 
   if (myMoviesIsLoading) {
@@ -109,8 +118,18 @@ const MyMovieList = (props: TProps) => {
     <div className="mt-10 w-[90%] mx-auto">
       <h1 className="w-fit mb-6 mx-auto text-2xl text-primary">MA LISTE</h1>
       <div className="flex justify-around">
-        <button onClick={handleClickToWatch}>A voir</button>
-        <button onClick={handleClickAlreadySeen}>Déjà vu</button>
+        <button
+          className={alreadySeenOpen ? `text-white` : `text-gray`}
+          onClick={handleClickToWatch}
+        >
+          A voir
+        </button>
+        <button
+          className={toWatchOpen ? `text-white` : `text-gray`}
+          onClick={handleClickAlreadySeen}
+        >
+          Déjà vu
+        </button>
       </div>
 
       <div className="flex flex-wrap justify-between w-full mt-8">
