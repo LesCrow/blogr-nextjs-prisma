@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import "react-toastify/dist/ReactToastify.css";
 import { releaseDate, runtimeToHours } from "../../utils/constants";
 import AddAMovie from "../../components/AddAmovie";
+import Button from "../../components/Button";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -65,12 +66,7 @@ const Movie: React.FC = () => {
       </div>
       <div className="w-[80%] flex flex-wrap pt-6">
         {movie.genres.map((genre) => (
-          <p
-            className="rounded-full bg-gray mb-4 mr-2 px-6 py-1 text-secondary"
-            key={genre.id}
-          >
-            {genre.name}
-          </p>
+          <Button key={genre.id} content={genre.name} />
         ))}
       </div>
       <p className="py-2 px-6">{movie.overview}</p>
