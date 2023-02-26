@@ -11,7 +11,7 @@ export default function Button({ content, handleClick, style }: Props) {
   return (
     <>
       <button
-        className={`bg-[#292E35] ${style} rounded-full w-fit px-6 py-1 mx-auto`}
+        className={`bg-[#292E35] ${style} rounded-full max-h-8 px-6 py-1 my-1 mx-auto`}
         onClick={handleClick}
         type="submit"
       >

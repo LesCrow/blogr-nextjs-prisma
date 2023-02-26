@@ -11,7 +11,7 @@ import Modal from "./modal/Modal";
 type TMyMovie = {
   id: string;
   api_id: number;
-  already_seen: boolean;
+  alreadySeen: boolean;
   favourite: boolean;
 };
 
@@ -93,18 +93,42 @@ export default function AddAmovie() {
             <button
               className="text-black"
               onClick={() => {
-                handleSubmitMovieList(idToNumber, true, false);
+                handleSubmitMovieList(idToNumber, false, false);
               }}
             >
-              A Voir
+              {!myMovie[0].alreadySeen ? (
+                <div className="flex justify-center -ml-6">
+                  <Image
+                    src="/pictos/checkmark.png"
+                    width={30}
+                    height={30}
+                    alt="checkmark"
+                  />
+                  <p>A Voir</p>
+                </div>
+              ) : (
+                <p>A voir</p>
+              )}
             </button>
             <button
               className="text-black"
               onClick={() => {
-                handleSubmitMovieList(idToNumber, false, false);
+                handleSubmitMovieList(idToNumber, true, false);
               }}
             >
-              Déjà vu
+              {myMovie[0].alreadySeen ? (
+                <div className="flex justify-center -ml-6">
+                  <Image
+                    src="/pictos/checkmark.png"
+                    width={30}
+                    height={30}
+                    alt="checkmark"
+                  />
+                  <p>Déjà vu</p>
+                </div>
+              ) : (
+                <p>Déjà vu</p>
+              )}
             </button>
           </div>
         </Modal>
