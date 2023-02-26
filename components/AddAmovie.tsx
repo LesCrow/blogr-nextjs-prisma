@@ -71,10 +71,6 @@ export default function AddAmovie() {
     movieFetcher.update(id, alreadySeen, favourite);
   };
 
-  const handleSubmitFavourite = (id: string, favourite: boolean) => {
-    movieFetcher.update(id, favourite);
-  };
-
   return (
     <>
       <ToastContainer position="top-center" />
@@ -85,11 +81,15 @@ export default function AddAmovie() {
         <button
           onClick={() => {
             setIsFavourite(!isFavourite);
-            handleSubmitUpdateMovieList(
-              myMovie[0].id,
-              myMovie[0].alreadySeen,
-              isFavourite
-            );
+            if (myMovie[0] === undefined) {
+              handleSubmitMovieList(idToNumber, true, true);
+            } else {
+              handleSubmitUpdateMovieList(
+                myMovie[0].id,
+                myMovie[0].alreadySeen,
+                isFavourite
+              );
+            }
           }}
         >
           {myMovie[0] !== undefined && myMovie[0].favourite ? (
@@ -108,19 +108,15 @@ export default function AddAmovie() {
             <button
               className="text-black"
               onClick={() => {
-                // if (myMovie[0] !== undefined) {
-                //   handleSubmitUpdateMovieList(id as string, true);
-                // } else {
                 handleSubmitUpdateMovieList(
                   myMovie[0].id,
                   false,
                   myMovie[0].favourite
                 );
-                // }
               }}
             >
               {myMovie[0] !== undefined && !myMovie[0].alreadySeen ? (
-                <div className="flex justify-center -ml-6">
+                <div className="flex justify-center -ml-8">
                   <Image
                     src="/pictos/checkmark.png"
                     width={30}
