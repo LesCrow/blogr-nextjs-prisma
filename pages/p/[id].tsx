@@ -66,7 +66,7 @@ const Movie: React.FC = () => {
       </div>
       <div className="w-[80%] flex flex-wrap pt-6">
         {movie.genres.map((genre) => (
-          <Button key={genre.id} content={genre.name} />
+          <Button key={genre.id} content={genre.name} style="text-secondary" />
         ))}
       </div>
       <p className="py-2 px-6">{movie.overview}</p>

@@ -3,7 +3,7 @@ import React from "react";
 type Props = {
   content: string;
   style?: string;
-  handleClick: () => void;
+  handleClick?: () => void;
 };
 //text-secondary
 
