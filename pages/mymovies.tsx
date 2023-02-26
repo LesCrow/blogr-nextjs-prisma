@@ -172,6 +172,9 @@ const MyMovieList = (props: TProps) => {
   if (myMoviesIsLoading) {
     return <div>Loading...</div>;
   }
+  if (myMoviesError) {
+    <p className="flex justify-center">Veuillez vous connectez</p>;
+  }
 
   myMovies.map((movie) => api_ids.push(movie.api_id));
   myMovies.filter((movie) => {
