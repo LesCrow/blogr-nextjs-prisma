@@ -2,6 +2,7 @@
 import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
@@ -13,6 +14,7 @@ type TProps = {
 };
 
 const MyMovieList = (props: TProps) => {
+  const { data: session, status } = useSession();
   const {
     data: myMovies,
     error: myMoviesError,
@@ -192,63 +194,69 @@ const MyMovieList = (props: TProps) => {
       >
         MA LISTE
       </button>
-      <div className="flex justify-around">
-        <Button
-          content="A voir"
-          handleClick={handleClickToWatch}
-          style={
-            myListOpen || toWatchOpen
-              ? `bg-secondary text-black`
-              : `text-secondary`
-          }
-        />
-        <Button
-          content="Déjà vu"
-          handleClick={handleClickAlreadySeen}
-          style={
-            myListOpen || alreadySeenOpen
-              ? `bg-secondary text-black`
-              : `text-secondary`
-          }
-        />
-      </div>
-      <div className="flex mt-4">
-        <Button
-          content="Favoris"
-          handleClick={handleClickFavourite}
-          style={
-            myListOpen || favouriteOpen
-              ? `bg-secondary text-black`
-              : `text-secondary`
-          }
-        />
-      </div>
-      <div className="flex flex-wrap justify-between w-full mt-8">
-        {myListOpen &&
-          movies.map((movie) => (
-            <Link key={movie.id} href={`p/${movie.id}`}>
-              <MovieList movie={movie} />
-            </Link>
-          ))}
-        {alreadySeenOpen &&
-          moviesAlreadySeen.map((movie) => (
-            <Link key={movie.id} href={`p/${movie.id}`}>
-              <MovieList movie={movie} />
-            </Link>
-          ))}
-        {toWatchOpen &&
-          moviesToWatch.map((movie) => (
-            <Link key={movie.id} href={`p/${movie.id}`}>
-              <MovieList movie={movie} />
-            </Link>
-          ))}
-        {favouriteOpen &&
-          moviesFavourite.map((movie) => (
-            <Link key={movie.id} href={`p/${movie.id}`}>
-              <MovieList movie={movie} />
-            </Link>
-          ))}
-      </div>
+      {session ? (
+        <>
+          <div className="flex justify-around">
+            <Button
+              content="A voir"
+              handleClick={handleClickToWatch}
+              style={
+                myListOpen || toWatchOpen
+                  ? `bg-secondary text-black`
+                  : `text-secondary`
+              }
+            />
+            <Button
+              content="Déjà vu"
+              handleClick={handleClickAlreadySeen}
+              style={
+                myListOpen || alreadySeenOpen
+                  ? `bg-secondary text-black`
+                  : `text-secondary`
+              }
+            />
+          </div>
+          <div className="flex mt-4">
+            <Button
+              content="Favoris"
+              handleClick={handleClickFavourite}
+              style={
+                myListOpen || favouriteOpen
+                  ? `bg-secondary text-black`
+                  : `text-secondary`
+              }
+            />
+          </div>
+          <div className="flex flex-wrap justify-between w-full mt-8">
+            {myListOpen &&
+              movies.map((movie) => (
+                <Link key={movie.id} href={`p/${movie.id}`}>
+                  <MovieList movie={movie} />
+                </Link>
+              ))}
+            {alreadySeenOpen &&
+              moviesAlreadySeen.map((movie) => (
+                <Link key={movie.id} href={`p/${movie.id}`}>
+                  <MovieList movie={movie} />
+                </Link>
+              ))}
+            {toWatchOpen &&
+              moviesToWatch.map((movie) => (
+                <Link key={movie.id} href={`p/${movie.id}`}>
+                  <MovieList movie={movie} />
+                </Link>
+              ))}
+            {favouriteOpen &&
+              moviesFavourite.map((movie) => (
+                <Link key={movie.id} href={`p/${movie.id}`}>
+                  <MovieList movie={movie} />
+                </Link>
+              ))}
+          </div>
+        </>
+      ) : (
+        <p className="flex justify-center">Veuillez vous connectez</p>
+      )}
     </div>
   );
 };
