@@ -16,7 +16,7 @@ export const movieFetcher = {
       alreadySeen: alreadySeen,
       favourite: favourite,
     }),
-  update: async (id: string, favourite?: boolean, alreadySeen?: boolean) =>
+  update: async (id: string, alreadySeen?: boolean, favourite?: boolean) =>
     await axiosInstance.put(`movies/${id}`, {
       alreadySeen: alreadySeen,
       favourite: favourite,
