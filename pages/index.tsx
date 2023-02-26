@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Roboto } from "@next/font/google";
 import MovieList from "../components/MovieCard";
 import MovieCard from "../components/MovieCard";
+import Button from "../components/Button";
 
 // export const getStaticProps: GetStaticProps = async () => {
 //   const movies = await prisma.movie.findMany();
@@ -78,12 +79,7 @@ const Movies: React.FC<Props> = (props) => {
           placeholder="Recherchez..."
           {...register("query")}
         />
-        <button
-          className="bg-[#292E35] text-secondary rounded-full w-fit px-6 py-1 mx-auto"
-          type="submit"
-        >
-          Search
-        </button>
+        <Button content="Search" />
       </form>
 
       {query === "" ? (

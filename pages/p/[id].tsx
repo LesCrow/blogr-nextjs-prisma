@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import "react-toastify/dist/ReactToastify.css";
 import { releaseDate, runtimeToHours } from "../../utils/constants";
 import AddAMovie from "../../components/AddAmovie";
+import Button from "../../components/Button";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -29,12 +30,17 @@ const Movie: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const idToNumber = parseInt(id as string);
+  const [isReadMore, setIsReadMore] = useState(true);
 
   const {
     data: movie,
     error: movieError,
     isLoading: movieIsLoading,
   } = useQuery<MovieProps>(["movie"], () => movieById.getOne(idToNumber));
+
+  const toggleReadMore = () => {
+    setIsReadMore(!isReadMore);
+  };
 
   if (movieIsLoading) {
     return <div>Loading...</div>;
@@ -54,7 +60,7 @@ const Movie: React.FC = () => {
         height={300}
         alt={movie.title}
       />
-      <div>
+      <div className="w-[200px] space-y-4">
         <h2 className="text-3xl text-primary">{movie.title}</h2>
         <p>by {director[0].name}</p>
         <div className="flex justify-between">
@@ -63,17 +69,21 @@ const Movie: React.FC = () => {
           <p>{runtimeToHours(movie.runtime)}</p>
         </div>
       </div>
-      <div className="w-[80%] flex flex-wrap pt-6">
+      <div className="w-[80%] flex flex-wrap pt-4">
         {movie.genres.map((genre) => (
-          <p
-            className="rounded-full bg-gray mb-4 mr-2 px-6 py-1 text-secondary"
-            key={genre.id}
-          >
-            {genre.name}
-          </p>
+          <Button key={genre.id} content={genre.name} style="text-secondary" />
         ))}
       </div>
-      <p className="py-2 px-6">{movie.overview}</p>
+      <p className="py-2 px-6">
+        {isReadMore ? movie.overview.slice(0, 150) : movie.overview}
+        <span className="cursor-pointer" onClick={toggleReadMore}>
+          {isReadMore ? (
+            <p className="text-secondary">...lire plus</p>
+          ) : (
+            <p className="text-secondary mt-4">Réduire</p>
+          )}
+        </span>
+      </p>
       <div className="flex">
         <Image src="/pictos/star.png" width={20} height={20} alt="star" />
         <p className="ml-2">{movie.vote_average}</p>

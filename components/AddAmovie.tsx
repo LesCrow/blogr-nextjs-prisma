@@ -7,11 +7,12 @@ import { getMovieByApiId, movieFetcher } from "../utils/fetcher";
 import { ToastContainer, toast } from "react-toastify";
 import useModal from "./modal/UseModal";
 import Modal from "./modal/Modal";
+import { Movie } from "@prisma/client";
 
 type TMyMovie = {
   id: string;
   api_id: number;
-  already_seen: boolean;
+  alreadySeen: boolean;
   favourite: boolean;
 };
 
@@ -41,6 +42,8 @@ export default function AddAmovie() {
     }
   }, [myMovie]);
 
+  console.log(myMovie);
+
   if (myMovieIsLoading) {
     return <div>Loading...</div>;
   }
@@ -53,15 +56,19 @@ export default function AddAmovie() {
   };
 
   const handleSubmitMovieList = (
-    id: number,
+    api_id: number,
     alreadySeen: boolean,
     favourite: boolean
   ) => {
-    movieFetcher.post(id, alreadySeen, favourite);
+    movieFetcher.post(api_id, alreadySeen, favourite);
   };
 
-  const handleSubmitFavourite = (id: string, favourite: boolean) => {
-    movieFetcher.update(id, favourite);
+  const handleSubmitUpdateMovieList = (
+    id: string,
+    alreadySeen: boolean,
+    favourite: boolean
+  ) => {
+    movieFetcher.update(id, alreadySeen, favourite);
   };
 
   return (
@@ -74,7 +81,15 @@ export default function AddAmovie() {
         <button
           onClick={() => {
             setIsFavourite(!isFavourite);
-            handleSubmitFavourite(myMovie[0].id, isFavourite);
+            if (myMovie[0] === undefined) {
+              handleSubmitMovieList(idToNumber, true, true);
+            } else {
+              handleSubmitUpdateMovieList(
+                myMovie[0].id,
+                myMovie[0].alreadySeen,
+                isFavourite
+              );
+            }
           }}
         >
           {myMovie[0] !== undefined && myMovie[0].favourite ? (
@@ -93,18 +108,50 @@ export default function AddAmovie() {
             <button
               className="text-black"
               onClick={() => {
-                handleSubmitMovieList(idToNumber, true, false);
+                handleSubmitUpdateMovieList(
+                  myMovie[0].id,
+                  false,
+                  myMovie[0].favourite
+                );
               }}
             >
-              A Voir
+              {myMovie[0] !== undefined && !myMovie[0].alreadySeen ? (
+                <div className="flex justify-center -ml-8">
+                  <Image
+                    src="/pictos/checkmark.png"
+                    width={30}
+                    height={30}
+                    alt="checkmark"
+                  />
+                  <p>A Voir</p>
+                </div>
+              ) : (
+                <p>A voir</p>
+              )}
             </button>
             <button
               className="text-black"
               onClick={() => {
-                handleSubmitMovieList(idToNumber, false, false);
+                handleSubmitUpdateMovieList(
+                  myMovie[0].id,
+                  true,
+                  myMovie[0].favourite
+                );
               }}
             >
-              Déjà vu
+              {myMovie[0] !== undefined && myMovie[0].alreadySeen ? (
+                <div className="flex justify-center -ml-6">
+                  <Image
+                    src="/pictos/checkmark.png"
+                    width={30}
+                    height={30}
+                    alt="checkmark"
+                  />
+                  <p>Déjà vu</p>
+                </div>
+              ) : (
+                <p>Déjà vu</p>
+              )}
             </button>
           </div>
         </Modal>
