@@ -35,25 +35,25 @@ const Movies: React.FC = () => {
 
   const {
     data: moviesTopRated,
-    error: moviesTopRatedError,
     isLoading: moviesTopeRatedIsLoading,
+    error: moviesTopRatedError,
   } = useQuery<arrayMovieProps>(["moviesTopRated"], () =>
     moviesByTopRated.getAll()
   );
 
   const {
-    data: movies,
-    error: moviesError,
-    isLoading: moviesIsLoading,
+    data: moviesByQueryString,
+    isLoading: moviesByQueryStringIsLoading,
+    error: moviesByQueryStringError,
   } = useQuery(["movies", queryString], () =>
     movieByString.getAll(queryString)
   );
 
-  if (moviesTopeRatedIsLoading || moviesIsLoading) {
+  if (moviesTopeRatedIsLoading || moviesByQueryStringIsLoading) {
     return <div>Loading....</div>;
   }
 
-  if (moviesTopRatedError || moviesError) {
+  if (moviesTopRatedError || moviesByQueryStringError) {
     return <div>An Error Occurred</div>;
   }
 
@@ -98,7 +98,7 @@ const Movies: React.FC = () => {
       ) : (
         <div className="mt-10">
           <div className="flex flex-wrap justify-between w-full">
-            {movies.results.map((movie: MovieProps) => (
+            {moviesByQueryString.results.map((movie: MovieProps) => (
               <Link href={`p/${movie.id}`} key={movie.id}>
                 <MovieList key={movie.id} movie={movie} />
               </Link>

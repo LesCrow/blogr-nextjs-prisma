@@ -8,6 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 import useModal from "./modal/UseModal";
 import Modal from "./modal/Modal";
 import { Movie } from "@prisma/client";
+import ToWatch from "./ToWatch";
+import AlreadySeen from "./AlreadySeen";
 
 type TMyMovie = {
   id: string;
@@ -16,37 +18,40 @@ type TMyMovie = {
   favourite: boolean;
 };
 
-export default function AddAmovie() {
+type Props = {
+  myMovie: Movie[];
+};
+
+export default function AddAmovie({ myMovie }: Props) {
   const router = useRouter();
   const { id } = router.query;
   const idToNumber = parseInt(id as string);
-  const { data: session, status } = useSession();
 
-  const notify = () => toast("Veuillez vous connectez");
+  const { data: session, status } = useSession();
   const { isShowing, toggle } = useModal();
-  const [data, setData] = useState<TMyMovie[]>([]);
+  // const [data, setData] = useState<TMyMovie[]>([]);
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
-  const {
-    data: myMovie,
-    error: myMovieError,
-    isLoading: myMovieIsLoading,
-  } = useQuery<TMyMovie[]>(
-    ["myMovie"],
-    async () => await getMovieByApiId.getOne(idToNumber)
-  );
+  const notify = () => toast("Veuillez vous connectez");
 
-  useEffect(() => {
-    if (myMovie) {
-      setData(myMovie);
-    }
-  }, [myMovie]);
+  // const {
+  //   data: myMovie,
+  //   error: myMovieError,
+  //   isLoading: myMovieIsLoading,
+  // } = useQuery<TMyMovie[]>(
+  //   ["myMovie"],
+  //   async () => await getMovieByApiId.getOne(idToNumber)
+  // );
 
-  console.log(myMovie);
+  // useEffect(() => {
+  //   if (myMovie) {
+  //     setData(myMovie);
+  //   }
+  // }, [myMovie]);
 
-  if (myMovieIsLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (myMovieIsLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   const onClickAdd = (session: object) => {
     if (session) {
@@ -71,6 +76,8 @@ export default function AddAmovie() {
     movieFetcher.update(id, alreadySeen, favourite);
   };
 
+  console.log(myMovie);
+
   return (
     <>
       <ToastContainer position="top-center" />
@@ -78,10 +85,11 @@ export default function AddAmovie() {
         <button onClick={onClickAdd(session)}>
           <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
         </button>
+
         <button
           onClick={() => {
             setIsFavourite(!isFavourite);
-            if (myMovie[0] === undefined) {
+            if (myMovie.length === 0) {
               handleSubmitMovieList(idToNumber, true, true);
             } else {
               handleSubmitUpdateMovieList(
@@ -105,54 +113,8 @@ export default function AddAmovie() {
         </button>
         <Modal isShowing={isShowing} hide={toggle} title="Ajouter à ma liste">
           <div className="flex flex-col space-y-5">
-            <button
-              className="text-black"
-              onClick={() => {
-                handleSubmitUpdateMovieList(
-                  myMovie[0].id,
-                  false,
-                  myMovie[0].favourite
-                );
-              }}
-            >
-              {myMovie[0] !== undefined && !myMovie[0].alreadySeen ? (
-                <div className="flex justify-center -ml-8">
-                  <Image
-                    src="/pictos/checkmark.png"
-                    width={30}
-                    height={30}
-                    alt="checkmark"
-                  />
-                  <p>A Voir</p>
-                </div>
-              ) : (
-                <p>A voir</p>
-              )}
-            </button>
-            <button
-              className="text-black"
-              onClick={() => {
-                handleSubmitUpdateMovieList(
-                  myMovie[0].id,
-                  true,
-                  myMovie[0].favourite
-                );
-              }}
-            >
-              {myMovie[0] !== undefined && myMovie[0].alreadySeen ? (
-                <div className="flex justify-center -ml-6">
-                  <Image
-                    src="/pictos/checkmark.png"
-                    width={30}
-                    height={30}
-                    alt="checkmark"
-                  />
-                  <p>Déjà vu</p>
-                </div>
-              ) : (
-                <p>Déjà vu</p>
-              )}
-            </button>
+            <ToWatch myMovie={myMovie} />
+            <AlreadySeen myMovie={myMovie} />
           </div>
         </Modal>
       </div>
