@@ -34,6 +34,23 @@ const MyMovieList = (props: TProps) => {
   const [moviesToWatch, setMoviesToWatch] = useState([]);
   const [moviesFavourite, setMoviesFavourite] = useState([]);
 
+  if (myMoviesIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  myMovies.map((movie) => api_ids.push(movie.api_id));
+  myMovies.filter((movie) => {
+    if (movie.alreadySeen) {
+      api_idsAlreadySeen.push(movie.api_id);
+    }
+    if (!movie.alreadySeen) {
+      api_idsToWatch.push(movie.api_id);
+    }
+    if (movie.favourite) {
+      api_idsFavourite.push(movie.api_id);
+    }
+  });
+
   // Fetch movies
   const fetchMovies = async (api_ids: number[]) => {
     const promises = api_ids.map((api_id) =>
@@ -51,69 +68,72 @@ const MyMovieList = (props: TProps) => {
     }
   };
 
-  useEffect(() => {
-    fetchMovies(api_ids);
-  }, []);
+  fetchMovies(api_ids);
+  console.log(movies);
 
-  const fetchMoviesAlreadySeen = async (api_idsAlreadySeen: number[]) => {
-    const promises = api_idsAlreadySeen.map((api_id) =>
-      axios.get(
-        `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
-      )
-    );
-    try {
-      const responses = await Promise.all(promises);
-      const myMoviesAlreadySeen = responses.map((res) => res.data);
-      setMoviesAlreadySeen(myMoviesAlreadySeen);
-    } catch (error) {
-      console.error(error);
-      throw new Error("Failed to fetch movies");
-    }
-  };
+  // useEffect(() => {
+  //   fetchMovies(api_ids);
+  // }, []);
 
-  useEffect(() => {
-    fetchMoviesAlreadySeen(api_idsAlreadySeen);
-  }, []);
+  // const fetchMoviesAlreadySeen = async (api_idsAlreadySeen: number[]) => {
+  //   const promises = api_idsAlreadySeen.map((api_id) =>
+  //     axios.get(
+  //       `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
+  //     )
+  //   );
+  //   try {
+  //     const responses = await Promise.all(promises);
+  //     const myMoviesAlreadySeen = responses.map((res) => res.data);
+  //     setMoviesAlreadySeen(myMoviesAlreadySeen);
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error("Failed to fetch movies");
+  //   }
+  // };
 
-  const fetchMoviesTowatch = async (api_idsNotSeen: number[]) => {
-    const promises = api_idsNotSeen.map((api_id) =>
-      axios.get(
-        `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
-      )
-    );
-    try {
-      const responses = await Promise.all(promises);
-      const myMoviesToWatch = responses.map((res) => res.data);
-      setMoviesToWatch(myMoviesToWatch);
-    } catch (error) {
-      console.error(error);
-      throw new Error("Failed to fetch movies");
-    }
-  };
+  // useEffect(() => {
+  //   fetchMoviesAlreadySeen(api_idsAlreadySeen);
+  // }, []);
 
-  useEffect(() => {
-    fetchMoviesTowatch(api_idsToWatch);
-  }, []);
+  // const fetchMoviesTowatch = async (api_idsNotSeen: number[]) => {
+  //   const promises = api_idsNotSeen.map((api_id) =>
+  //     axios.get(
+  //       `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
+  //     )
+  //   );
+  //   try {
+  //     const responses = await Promise.all(promises);
+  //     const myMoviesToWatch = responses.map((res) => res.data);
+  //     setMoviesToWatch(myMoviesToWatch);
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error("Failed to fetch movies");
+  //   }
+  // };
 
-  const fetchMoviesFavourite = async (api_idsFavourite: number[]) => {
-    const promises = api_idsFavourite.map((api_id) =>
-      axios.get(
-        `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
-      )
-    );
-    try {
-      const responses = await Promise.all(promises);
-      const myMoviesFavourite = responses.map((res) => res.data);
-      setMoviesFavourite(myMoviesFavourite);
-    } catch (error) {
-      console.error(error);
-      throw new Error("Failed to fetch movies");
-    }
-  };
+  // useEffect(() => {
+  //   fetchMoviesTowatch(api_idsToWatch);
+  // }, []);
 
-  useEffect(() => {
-    fetchMoviesFavourite(api_idsFavourite);
-  }, []);
+  // const fetchMoviesFavourite = async (api_idsFavourite: number[]) => {
+  //   const promises = api_idsFavourite.map((api_id) =>
+  //     axios.get(
+  //       `https://api.themoviedb.org/3/movie/${api_id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits`
+  //     )
+  //   );
+  //   try {
+  //     const responses = await Promise.all(promises);
+  //     const myMoviesFavourite = responses.map((res) => res.data);
+  //     setMoviesFavourite(myMoviesFavourite);
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error("Failed to fetch movies");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchMoviesFavourite(api_idsFavourite);
+  // }, []);
 
   // No session
   if (!session) {
@@ -177,23 +197,9 @@ const MyMovieList = (props: TProps) => {
     }
   };
 
-  // Loader
-  if (myMoviesIsLoading) {
-    return <div>Loading...</div>;
-  }
+  // Loaders
 
-  myMovies.map((movie) => api_ids.push(movie.api_id));
-  myMovies.filter((movie) => {
-    if (movie.alreadySeen) {
-      api_idsAlreadySeen.push(movie.api_id);
-    }
-    if (!movie.alreadySeen) {
-      api_idsToWatch.push(movie.api_id);
-    }
-    if (movie.favourite) {
-      api_idsFavourite.push(movie.api_id);
-    }
-  });
+  console.log(api_ids);
 
   return (
     <div className="mt-10 w-[90%] mx-auto">

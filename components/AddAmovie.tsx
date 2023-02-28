@@ -20,9 +20,10 @@ type TMyMovie = {
 
 type Props = {
   myMovie: Movie[];
+  isMovieInMyList: boolean;
 };
 
-export default function AddAmovie({ myMovie }: Props) {
+export default function AddAmovie({ myMovie, isMovieInMyList }: Props) {
   const router = useRouter();
   const { id } = router.query;
   const idToNumber = parseInt(id as string);
@@ -92,8 +93,8 @@ export default function AddAmovie({ myMovie }: Props) {
         </button>
         <Modal isShowing={isShowing} hide={toggle} title="Ajouter à ma liste">
           <div className="flex flex-col space-y-5">
-            <ToWatch myMovie={myMovie} />
-            <AlreadySeen myMovie={myMovie} />
+            <ToWatch myMovie={myMovie} isMovieInMyList={isMovieInMyList} />
+            <AlreadySeen myMovie={myMovie} isMovieInMyList={isMovieInMyList} />
           </div>
         </Modal>
       </div>

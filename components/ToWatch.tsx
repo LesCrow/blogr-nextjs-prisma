@@ -5,14 +5,20 @@ import { movieFetcher } from "../utils/fetcher";
 
 type Props = {
   myMovie: Movie[];
+  isMovieInMyList: boolean;
 };
 
-function ToWatch({ myMovie }: Props) {
-  const handleSubmitUpdateMovieList = (
+function ToWatch({ myMovie, isMovieInMyList }: Props) {
+  const handleSubmitAddToWatchList = (
     id: string,
+    api_id: number,
     alreadySeen: boolean,
     favourite: boolean
   ) => {
+    if (myMovie[0] !== undefined) {
+      movieFetcher.post(api_id, alreadySeen, favourite);
+    } else {
+    }
     movieFetcher.update(id, alreadySeen, favourite);
   };
 
@@ -21,8 +27,9 @@ function ToWatch({ myMovie }: Props) {
       <button
         className="text-black w-fit mx-auto"
         onClick={() => {
-          handleSubmitUpdateMovieList(
+          handleSubmitAddToWatchList(
             myMovie[0].id,
+            myMovie[0].api_id,
             false,
             myMovie[0].favourite
           );

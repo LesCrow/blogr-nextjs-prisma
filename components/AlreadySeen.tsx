@@ -5,9 +5,10 @@ import { movieFetcher } from "../utils/fetcher";
 
 type Props = {
   myMovie: Movie[];
+  isMovieInMyList: boolean;
 };
 
-export default function AlreadySeen({ myMovie }: Props) {
+export default function AlreadySeen({ myMovie, isMovieInMyList }: Props) {
   const handleSubmitUpdateMovieList = (
     id: string,
     alreadySeen: boolean,

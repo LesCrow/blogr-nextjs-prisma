@@ -66,7 +66,6 @@ const Movie: React.FC = () => {
   const director: DirectorProps[] = movieDetails.credits.crew.filter(
     ({ job }) => job === "Director"
   );
-  console.log(isMovieInMyList);
 
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
@@ -74,7 +73,9 @@ const Movie: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center space-y-2 mt-8 pb-8">
-      {session && <AddAMovie myMovie={movieInMyList} />}
+      {session && (
+        <AddAMovie myMovie={movieInMyList} isMovieInMyList={isMovieInMyList} />
+      )}
 
       <Image
         src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`}
@@ -83,9 +84,9 @@ const Movie: React.FC = () => {
         alt={movieDetails.title}
       />
       <div className="w-[200px] space-y-4">
-        <div className="flex justify-between">
+        <div className="flex justify-between place-items-end">
           <h2 className="text-3xl text-primary">{movieDetails.title}</h2>
-          {isMovieInMyList ? (
+          {isMovieInMyList && movieInMyList[0] !== undefined ? (
             movieInMyList[0].alreadySeen ? (
               <Image
                 src="/pictos/checkmark.png"
