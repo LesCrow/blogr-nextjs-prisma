@@ -37,7 +37,9 @@ const Movie: React.FC = () => {
     data: movieDetails,
     isLoading: movieDetailsIsLoading,
     error: movieDetailsError,
-  } = useQuery<MovieProps>(["movie"], () => movieById.getOne(idToNumber));
+  } = useQuery<MovieProps>(["movie", idToNumber], () =>
+    movieById.getOne(idToNumber)
+  );
 
   const {
     data: movieInMyList,

@@ -26,32 +26,11 @@ export default function AddAmovie({ myMovie }: Props) {
   const router = useRouter();
   const { id } = router.query;
   const idToNumber = parseInt(id as string);
-
   const { data: session, status } = useSession();
   const { isShowing, toggle } = useModal();
-  // const [data, setData] = useState<TMyMovie[]>([]);
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
   const notify = () => toast("Veuillez vous connectez");
-
-  // const {
-  //   data: myMovie,
-  //   error: myMovieError,
-  //   isLoading: myMovieIsLoading,
-  // } = useQuery<TMyMovie[]>(
-  //   ["myMovie"],
-  //   async () => await getMovieByApiId.getOne(idToNumber)
-  // );
-
-  // useEffect(() => {
-  //   if (myMovie) {
-  //     setData(myMovie);
-  //   }
-  // }, [myMovie]);
-
-  // if (myMovieIsLoading) {
-  //   return <div>Loading...</div>;
-  // }
 
   const onClickAdd = (session: object) => {
     if (session) {
