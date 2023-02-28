@@ -11,6 +11,7 @@ import { releaseDate, runtimeToHours } from "../../utils/constants";
 import AddAMovie from "../../components/AddAmovie";
 import Button from "../../components/Button";
 import { getMovieByApiId } from "../../utils/fetcher";
+import { Movie } from "@prisma/client";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -24,18 +25,12 @@ import { getMovieByApiId } from "../../utils/fetcher";
 //   };
 // };
 
-type TMyMovie = {
-  id: string;
-  api_id: number;
-  alreadySeen: boolean;
-  favourite: boolean;
-};
-
 const Movie: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { id } = router.query;
   const idToNumber = parseInt(id as string);
+  const [isMovieInMyList, setIsMovieInMyList] = useState<boolean>(false);
   const [isReadMore, setIsReadMore] = useState(true);
 
   const {
@@ -45,25 +40,31 @@ const Movie: React.FC = () => {
   } = useQuery<MovieProps>(["movie"], () => movieById.getOne(idToNumber));
 
   const {
-    data: myMovie,
-    isLoading: myMovieIsLoading,
-    error: myMovieError,
-  } = useQuery<TMyMovie[]>(
+    data: movieInMyList,
+    isLoading: movieInMyListIsLoading,
+    error: movieInMyListError,
+  } = useQuery<Movie[]>(
     ["myMovie"],
     async () => await getMovieByApiId.getOne(idToNumber)
   );
+  useEffect(() => {
+    if (movieInMyList && movieInMyList.length > 0) {
+      setIsMovieInMyList(true);
+    }
+  }, [movieInMyList]);
 
-  if (movieDetailsIsLoading || myMovieIsLoading) {
+  if (movieDetailsIsLoading || movieInMyListIsLoading) {
     return <div>Loading...</div>;
   }
 
-  if (movieDetailsError || myMovieError) {
+  if (movieDetailsError || movieInMyListError) {
     return <div>An Error Occured</div>;
   }
 
   const director: DirectorProps[] = movieDetails.credits.crew.filter(
     ({ job }) => job === "Director"
   );
+  console.log(isMovieInMyList);
 
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
@@ -71,7 +72,7 @@ const Movie: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center space-y-2 mt-8 pb-8">
-      {session && <AddAMovie myMovie={myMovie} />}
+      {session && <AddAMovie myMovie={movieInMyList} />}
 
       <Image
         src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`}
@@ -80,7 +81,45 @@ const Movie: React.FC = () => {
         alt={movieDetails.title}
       />
       <div className="w-[200px] space-y-4">
-        <h2 className="text-3xl text-primary">{movieDetails.title}</h2>
+        <div className="flex justify-between">
+          <h2 className="text-3xl text-primary">{movieDetails.title}</h2>
+          {isMovieInMyList ? (
+            movieInMyList[0].alreadySeen ? (
+              <Image
+                src="/pictos/checkmark.png"
+                width={30}
+                height={30}
+                alt="checkmark"
+              />
+            ) : (
+              <Image
+                src="/pictos/jumelles.png"
+                width={30}
+                height={30}
+                alt="jumelles"
+              />
+            )
+          ) : (
+            <></>
+          )}
+
+          {/* 
+          {isMovieInMyList && movieInMyList[0].alreadySeen ? (
+            <Image
+              src="/pictos/checkmark.png"
+              width={30}
+              height={30}
+              alt="checkmark"
+            />
+          ) : (
+            <Image
+              src="/pictos/jumelles.png"
+              width={30}
+              height={30}
+              alt="jumelles"
+            />
+          )} */}
+        </div>
         <p>by {director[0].name}</p>
         <div className="flex justify-between">
           <p>{releaseDate(movieDetails.release_date)}</p>
