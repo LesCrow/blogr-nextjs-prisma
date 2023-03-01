@@ -123,10 +123,6 @@ const MyMovieList = (props: TProps) => {
     return <Loader />;
   }
 
-  if (myMoviesError) {
-    return <div>An Error Occured</div>;
-  }
-
   myMovies.map((movie) => api_ids.push(movie.api_id));
   myMovies.filter((movie) => {
     if (movie.alreadySeen) {
