@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { GetStaticProps } from "next";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Movie, Movie as TMovie } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { movieByString, moviesByTopRated } from "../utils/tmdbFetcher";
@@ -27,38 +25,40 @@ const roboto = Roboto({
   subsets: ["latin"],
 });
 
-type Props = {
-  movies: TMovie[];
-};
 type arrayMovieProps = {
   results: [MovieProps];
 };
 
-const Movies: React.FC<Props> = (props) => {
-  const { data: session, status } = useSession();
+const Movies: React.FC = () => {
   const { register, handleSubmit } = useForm();
-  const [query, setQuery] = useState("");
+  const [queryString, setQueryString] = useState(undefined);
 
   const {
     data: moviesTopRated,
-    error: moviesTopRatedError,
     isLoading: moviesTopeRatedIsLoading,
+    error: moviesTopRatedError,
   } = useQuery<arrayMovieProps>(["moviesTopRated"], () =>
     moviesByTopRated.getAll()
   );
 
   const {
-    data: movies,
-    error: moviesError,
-    isLoading: moviesIsLoading,
-  } = useQuery<arrayMovieProps>(["movies"], () => movieByString.getAll(query));
+    data: moviesByQueryString,
+    isLoading: moviesByQueryStringIsLoading,
+    error: moviesByQueryStringError,
+  } = useQuery(["movies", queryString], () =>
+    movieByString.getAll(queryString)
+  );
 
-  if (moviesIsLoading || moviesTopeRatedIsLoading) {
+  if (moviesTopeRatedIsLoading || moviesByQueryStringIsLoading) {
     return <div>Loading....</div>;
   }
 
-  const OnSubmit = (data: any) => {
-    setQuery(data.query);
+  if (moviesTopRatedError || moviesByQueryStringError) {
+    return <div>An Error Occurred</div>;
+  }
+
+  const onSubmit = (data: { query: string }) => {
+    setQueryString(data.query);
   };
 
   return (
@@ -72,7 +72,7 @@ const Movies: React.FC<Props> = (props) => {
       />
       <form
         className="flex flex-col space-y-4"
-        onSubmit={handleSubmit(OnSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <input
           className="rounded-full h-8 px-4 text-center text-black border border-black"
@@ -82,7 +82,7 @@ const Movies: React.FC<Props> = (props) => {
         <Button content="Search" />
       </form>
 
-      {query === "" ? (
+      {queryString === undefined ? (
         <div className="mt-10">
           <h1 className="w-fit mb-6 mx-auto text-2xl text-primary">
             Les mieux notés
@@ -98,7 +98,7 @@ const Movies: React.FC<Props> = (props) => {
       ) : (
         <div className="mt-10">
           <div className="flex flex-wrap justify-between w-full">
-            {movies.results.map((movie: MovieProps) => (
+            {moviesByQueryString.results.map((movie: MovieProps) => (
               <Link href={`p/${movie.id}`} key={movie.id}>
                 <MovieList key={movie.id} movie={movie} />
               </Link>

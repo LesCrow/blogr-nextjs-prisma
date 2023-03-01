@@ -44,7 +44,9 @@ const MyMovieList = (props: TProps) => {
     try {
       const responses = await Promise.all(promises);
       const myMovies = responses.map((res) => res.data);
+
       setMovies(myMovies);
+      console.log(movies);
     } catch (error) {
       console.error(error);
       throw new Error("Failed to fetch movies");
@@ -115,6 +117,24 @@ const MyMovieList = (props: TProps) => {
     fetchMoviesFavourite(api_idsFavourite);
   }, []);
 
+  // Loaders and Error
+  if (myMoviesIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  myMovies.map((movie) => api_ids.push(movie.api_id));
+  myMovies.filter((movie) => {
+    if (movie.alreadySeen) {
+      api_idsAlreadySeen.push(movie.api_id);
+    }
+    if (!movie.alreadySeen) {
+      api_idsToWatch.push(movie.api_id);
+    }
+    if (movie.favourite) {
+      api_idsFavourite.push(movie.api_id);
+    }
+  });
+
   // No session
   if (!session) {
     return (
@@ -176,24 +196,6 @@ const MyMovieList = (props: TProps) => {
       setAlreadySeenOpen(false);
     }
   };
-
-  // Loader
-  if (myMoviesIsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  myMovies.map((movie) => api_ids.push(movie.api_id));
-  myMovies.filter((movie) => {
-    if (movie.alreadySeen) {
-      api_idsAlreadySeen.push(movie.api_id);
-    }
-    if (!movie.alreadySeen) {
-      api_idsToWatch.push(movie.api_id);
-    }
-    if (movie.favourite) {
-      api_idsFavourite.push(movie.api_id);
-    }
-  });
 
   return (
     <div className="mt-10 w-[90%] mx-auto">
