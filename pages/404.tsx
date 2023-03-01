@@ -33,7 +33,7 @@ export default function FourOFour({}: Props) {
         width={1000}
         height={1000}
         alt="404"
-        className="w-full h-screen object-fill"
+        className="w-full h-screen object-cover md:object-fill"
       />
       <p className="text-8xl absolute top-[50%] text-center w-full text-primary ">
         {text1} <br />
