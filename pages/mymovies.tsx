@@ -45,9 +45,7 @@ const MyMovieList = (props: TProps) => {
     try {
       const responses = await Promise.all(promises);
       const myMovies = responses.map((res) => res.data);
-
       setMovies(myMovies);
-      console.log(movies);
     } catch (error) {
       console.error(error);
       throw new Error("Failed to fetch movies");

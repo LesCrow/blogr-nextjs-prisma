@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -10,13 +9,6 @@ import Modal from "./modal/Modal";
 import { Movie } from "@prisma/client";
 import ToWatch from "./ToWatch";
 import AlreadySeen from "./AlreadySeen";
-
-type TMyMovie = {
-  id: string;
-  api_id: number;
-  alreadySeen: boolean;
-  favourite: boolean;
-};
 
 type Props = {
   myMovie: Movie[];
@@ -33,7 +25,13 @@ export default function AddAmovie({ myMovie, isMovieInMyList }: Props) {
 
   const notify = () => toast("Veuillez vous connectez");
 
-  const onClickAdd = (session: object) => {
+  useEffect(() => {
+    if (myMovie[0] !== undefined && myMovie[0].favourite) {
+      setIsFavourite(true);
+    }
+  }, [myMovie]);
+
+  const handleClickAddAMovie = (session: object) => {
     if (session) {
       return toggle;
     }
@@ -56,13 +54,13 @@ export default function AddAmovie({ myMovie, isMovieInMyList }: Props) {
     movieFetcher.update(id, alreadySeen, favourite);
   };
 
-  console.log(myMovie);
+  console.log("state :", isFavourite, "data:", myMovie[0].favourite);
 
   return (
     <>
       <ToastContainer position="top-center" />
       <div className="w-[50%] flex items-center justify-between">
-        <button onClick={onClickAdd(session)}>
+        <button onClick={handleClickAddAMovie(session)}>
           <Image src="/pictos/ajouter.png" width={40} height={40} alt="add" />
         </button>
 
@@ -80,7 +78,7 @@ export default function AddAmovie({ myMovie, isMovieInMyList }: Props) {
             }
           }}
         >
-          {myMovie[0] !== undefined && myMovie[0].favourite ? (
+          {myMovie[0] !== undefined && myMovie[0].favourite && isFavourite ? (
             <Image src="/pictos/coeur.png" width={30} height={30} alt="liked" />
           ) : (
             <Image
