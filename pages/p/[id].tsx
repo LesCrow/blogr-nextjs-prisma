@@ -12,6 +12,7 @@ import AddAMovie from "../../components/AddAmovie";
 import Button from "../../components/Button";
 import { getMovieByApiId } from "../../utils/fetcher";
 import { Movie } from "@prisma/client";
+import Loader from "../../components/Loader";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const {
@@ -56,7 +57,7 @@ const Movie: React.FC = () => {
   }, [movieInMyList]);
 
   if (movieDetailsIsLoading || movieInMyListIsLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (movieDetailsError || movieInMyListError) {
