@@ -10,6 +10,7 @@ import { Roboto } from "@next/font/google";
 import MovieList from "../components/MovieCard";
 import MovieCard from "../components/MovieCard";
 import Button from "../components/Button";
+import Loader from "../components/Loader";
 
 // export const getStaticProps: GetStaticProps = async () => {
 //   const movies = await prisma.movie.findMany();
@@ -50,7 +51,7 @@ const Movies: React.FC = () => {
   );
 
   if (moviesTopeRatedIsLoading || moviesByQueryStringIsLoading) {
-    return <div>Loading....</div>;
+    return <Loader />;
   }
 
   if (moviesTopRatedError || moviesByQueryStringError) {
