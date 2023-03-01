@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
+import Loader from "../components/Loader";
 import MovieList from "../components/MovieCard";
 import { movieFetcher } from "../utils/fetcher";
 
@@ -119,7 +120,7 @@ const MyMovieList = (props: TProps) => {
 
   // Loaders and Error
   if (myMoviesIsLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   myMovies.map((movie) => api_ids.push(movie.api_id));

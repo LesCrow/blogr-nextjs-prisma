@@ -16,6 +16,11 @@ const options = {
       clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
+  callbacks: {
+    async redirect() {
+      return "/";
+    },
+  },
   adapter: PrismaAdapter(prisma),
   secret: process.env.SECRET,
 };
