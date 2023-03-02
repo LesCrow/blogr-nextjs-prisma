@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../../../context/UserContext";
+import { useAuth } from "../../context/UserContext";
 
 type Props = {};
 

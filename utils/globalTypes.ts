@@ -38,3 +38,7 @@ export type DirectorProps = {
   popularity: number;
   profile_path: string;
 };
+
+export type ResponseError = {
+  message: string | unknown;
+};
