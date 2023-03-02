@@ -1,4 +1,5 @@
 import { NextApiResponse, NextApiRequest } from "next";
+import { getServerSession } from "next-auth";
 import prisma from "../../../lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

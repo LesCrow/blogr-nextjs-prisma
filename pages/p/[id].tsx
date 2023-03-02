@@ -50,12 +50,14 @@ const Movie: React.FC = () => {
     ["myMovie"],
     async () => await getMovieByApiId.getOne(idToNumber)
   );
+
   useEffect(() => {
     if (movieInMyList && movieInMyList.length > 0) {
       setIsMovieInMyList(true);
     }
   }, [movieInMyList]);
 
+  // Loadors and Error
   if (movieDetailsIsLoading || movieInMyListIsLoading) {
     return <Loader />;
   }

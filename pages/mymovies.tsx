@@ -45,9 +45,7 @@ const MyMovieList = (props: TProps) => {
     try {
       const responses = await Promise.all(promises);
       const myMovies = responses.map((res) => res.data);
-
       setMovies(myMovies);
-      console.log(movies);
     } catch (error) {
       console.error(error);
       throw new Error("Failed to fetch movies");
@@ -55,8 +53,10 @@ const MyMovieList = (props: TProps) => {
   };
 
   useEffect(() => {
-    fetchMovies(api_ids);
-  }, []);
+    if (!myMoviesIsLoading) {
+      fetchMovies(api_ids);
+    }
+  }, [myMoviesIsLoading]);
 
   const fetchMoviesAlreadySeen = async (api_idsAlreadySeen: number[]) => {
     const promises = api_idsAlreadySeen.map((api_id) =>
@@ -75,8 +75,10 @@ const MyMovieList = (props: TProps) => {
   };
 
   useEffect(() => {
-    fetchMoviesAlreadySeen(api_idsAlreadySeen);
-  }, []);
+    if (!myMoviesIsLoading) {
+      fetchMoviesAlreadySeen(api_idsAlreadySeen);
+    }
+  }, [myMoviesIsLoading]);
 
   const fetchMoviesTowatch = async (api_idsNotSeen: number[]) => {
     const promises = api_idsNotSeen.map((api_id) =>
@@ -95,8 +97,10 @@ const MyMovieList = (props: TProps) => {
   };
 
   useEffect(() => {
-    fetchMoviesTowatch(api_idsToWatch);
-  }, []);
+    if (!myMoviesIsLoading) {
+      fetchMoviesTowatch(api_idsToWatch);
+    }
+  }, [myMoviesIsLoading]);
 
   const fetchMoviesFavourite = async (api_idsFavourite: number[]) => {
     const promises = api_idsFavourite.map((api_id) =>
@@ -115,14 +119,21 @@ const MyMovieList = (props: TProps) => {
   };
 
   useEffect(() => {
-    fetchMoviesFavourite(api_idsFavourite);
-  }, []);
+    if (!myMoviesIsLoading) {
+      fetchMoviesFavourite(api_idsFavourite);
+    }
+  }, [myMoviesIsLoading]);
 
   // Loaders and Error
   if (myMoviesIsLoading) {
     return <Loader />;
   }
 
+  if (myMoviesError) {
+    return <div>An Error Occured</div>;
+  }
+
+  // Fill api ids arrays
   myMovies.map((movie) => api_ids.push(movie.api_id));
   myMovies.filter((movie) => {
     if (movie.alreadySeen) {
