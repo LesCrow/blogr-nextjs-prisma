@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useState } from "react";
 import { useAuth } from "../../context/UserContext";
 
@@ -17,5 +18,19 @@ export default function SignIn({}: Props) {
     });
   };
 
-  return <div>SignIn</div>;
+  return (
+    <div className="flex flex-col items-center">
+      <h1>SIGN IN</h1>
+
+      <div className="flex flex-col items-center mt-8">
+        <p>Pas encore inscrit ?</p>
+        <Link
+          href="/auth/signup"
+          className="mt-4 bg-secondary px-4 py-2 rounded-full"
+        >
+          SIGN UP
+        </Link>
+      </div>
+    </div>
+  );
 }

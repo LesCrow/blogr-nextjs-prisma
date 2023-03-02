@@ -24,7 +24,7 @@ export default function Sidebar() {
         />
       }
     >
-      <div className="space-y-4 text-3xl">
+      <div className="space-y-4 mt-8 text-3xl font-semibold">
         <Link onClick={handleCloseMenu} href="/">
           HOME
         </Link>
@@ -32,6 +32,11 @@ export default function Sidebar() {
         <Link onClick={handleCloseMenu} href="/mymovies">
           MA LISTE
         </Link>
+        <br />
+        <Link onClick={handleCloseMenu} href="/auth/signup">
+          SIGNUP
+        </Link>
+        <br />
       </div>
     </Menu>
   );
