@@ -1,69 +1,55 @@
-import { NextApiResponse, NextApiRequest } from "next";
-import { getServerSession } from "next-auth";
+import bcrypt from "bcryptjs";
+import { NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import prisma from "../../../lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   const { id } = req.query;
-  const { api_id } = req.query;
-  const parsedApi_id = parseInt(api_id as string);
 
   switch (method) {
     case "GET":
-      if (parsedApi_id) {
-        try {
-          const movies = await prisma.movie.findUniqueOrThrow({
-            where: {
-              api_id: parsedApi_id,
-            },
-          });
-          res.status(200).json(movies);
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ message: error });
-        }
-        break;
-      }
       try {
-        const movie = await prisma.movie.findUniqueOrThrow({
+        const user = await prisma.user.findUniqueOrThrow({
           where: {
             id: id as string,
           },
         });
-        res.status(200).json(movie);
+        res.status(200).json(user);
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: error });
       }
       break;
-
     case "PUT":
       try {
-        const { alreadySeen, favourite } = req.body;
-        const updatedMovie = await prisma.movie.update({
+        const { name, email, password, image } = req.body;
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        const updatedUser = await prisma.user.update({
           where: {
             id: id as string,
           },
           data: {
-            alreadySeen: alreadySeen,
-            favourite: favourite,
+            name: name,
+            email: email,
+            password: hashedPassword,
+            image: image,
           },
         });
-        res.status(200).json(updatedMovie);
+        res.status(200).json(updatedUser);
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: error });
       }
       break;
-
     case "DELETE":
       try {
-        const deletedMovie = await prisma.movie.delete({
+        const deletedUser = await prisma.user.delete({
           where: {
             id: id as string,
           },
         });
-        res.status(200).json(deletedMovie);
+        res.status(200).json(deletedUser);
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: error });

@@ -17,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           });
           res.status(200).json(movies);
         } catch (error) {
-          console.log(error);
+          console.error(error);
           res.status(500).json({ message: error });
         }
         break;
@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const movies = await prisma.movie.findMany({});
         res.status(200).json(movies);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({ message: error });
       }
       break;
