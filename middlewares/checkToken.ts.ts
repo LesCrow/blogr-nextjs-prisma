@@ -1,13 +1,12 @@
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
 import jwt from "jsonwebtoken";
-import { NextMiddleware } from "next/server";
 import getSecretKey from "../utils/auth";
 
 export default function checkToken(
   req: NextApiRequest,
   res: NextApiResponse,
-  next
+  next: Function
 ) {
   const token = req.headers["authorization"]?.split(" ")[1];
 

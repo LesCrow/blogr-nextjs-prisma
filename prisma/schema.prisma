@@ -12,7 +12,7 @@ datasource db {
 
 model Movie {
   id String @default(cuid()) @id
-  api_id Int @unique
+  api_id Int 
   favourite Boolean @default(false)
   alreadySeen Boolean @default(false)
   user User @relation(fields: [userId], references: [id] )

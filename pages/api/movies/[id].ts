@@ -10,20 +10,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (method) {
     case "GET":
-      if (parsedApi_id) {
-        try {
-          const movies = await prisma.movie.findUniqueOrThrow({
-            where: {
-              api_id: parsedApi_id,
-            },
-          });
-          res.status(200).json(movies);
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ message: error });
-        }
-        break;
-      }
       try {
         const movie = await prisma.movie.findUniqueOrThrow({
           where: {
