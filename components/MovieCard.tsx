@@ -10,13 +10,16 @@ type Props = {
 
 export default function MovieCard({ movie }: Props) {
   return (
-    <div className="w-full mb-10 border border-[#1A1A1A]">
-      <Image
-        src={srcImage(movie.poster_path)}
-        width={150}
-        height={300}
-        alt={movie.title}
-      />
+    <div className="w-full h-[330.6px] mb-10 border border-[#1A1A1A]">
+      <div className="h-[225px]">
+        <Image
+          src={srcImage(movie.poster_path)}
+          width={150}
+          height={300}
+          alt={movie.title}
+        />
+      </div>
+
       <div className="mt-2 pb-4 w-fit space-y-2">
         <div className="flex pl-2">
           <Image src="/pictos/star.png" width={20} height={20} alt="star" />
