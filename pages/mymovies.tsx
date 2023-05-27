@@ -22,10 +22,6 @@ const MyMovieList = (props: TProps) => {
     isLoading: myMoviesIsLoading,
   } = useQuery<Movie[]>(["myMovies"], async () => movieFetcher.getAll());
 
-  const api_ids: number[] = [];
-  const api_idsAlreadySeen: number[] = [];
-  const api_idsToWatch: number[] = [];
-  const api_idsFavourite: number[] = [];
   const [toWatchOpen, setToWatchOpen] = useState(false);
   const [alreadySeenOpen, setAlreadySeenOpen] = useState(false);
   const [favouriteOpen, setFavouriteOpen] = useState(false);
@@ -53,10 +49,28 @@ const MyMovieList = (props: TProps) => {
   };
 
   useEffect(() => {
-    if (!myMoviesIsLoading) {
-      fetchMovies(api_ids);
-    }
-  }, [myMoviesIsLoading]);
+    if (!myMovies) return;
+    // Fill api ids arrays
+    const api_ids = myMovies.map((movie) => movie.api_id);
+    const api_idsAlreadySeen: number[] = [];
+    const api_idsToWatch: number[] = [];
+    const api_idsFavourite: number[] = [];
+    myMovies.forEach((movie) => {
+      if (movie.alreadySeen) {
+        api_idsAlreadySeen.push(movie.api_id);
+      }
+      if (!movie.alreadySeen) {
+        api_idsToWatch.push(movie.api_id);
+      }
+      if (movie.favourite) {
+        api_idsFavourite.push(movie.api_id);
+      }
+    });
+    fetchMovies(api_ids);
+    fetchMoviesAlreadySeen(api_idsAlreadySeen);
+    fetchMoviesTowatch(api_idsToWatch);
+    fetchMoviesFavourite(api_idsFavourite);
+  }, [myMovies]);
 
   const fetchMoviesAlreadySeen = async (api_idsAlreadySeen: number[]) => {
     const promises = api_idsAlreadySeen.map((api_id) =>
@@ -74,12 +88,6 @@ const MyMovieList = (props: TProps) => {
     }
   };
 
-  useEffect(() => {
-    if (!myMoviesIsLoading) {
-      fetchMoviesAlreadySeen(api_idsAlreadySeen);
-    }
-  }, [myMoviesIsLoading]);
-
   const fetchMoviesTowatch = async (api_idsNotSeen: number[]) => {
     const promises = api_idsNotSeen.map((api_id) =>
       axios.get(
@@ -95,12 +103,6 @@ const MyMovieList = (props: TProps) => {
       throw new Error("Failed to fetch movies");
     }
   };
-
-  useEffect(() => {
-    if (!myMoviesIsLoading) {
-      fetchMoviesTowatch(api_idsToWatch);
-    }
-  }, [myMoviesIsLoading]);
 
   const fetchMoviesFavourite = async (api_idsFavourite: number[]) => {
     const promises = api_idsFavourite.map((api_id) =>
@@ -118,13 +120,6 @@ const MyMovieList = (props: TProps) => {
     }
   };
 
-  useEffect(() => {
-    if (!myMoviesIsLoading) {
-      fetchMoviesFavourite(api_idsFavourite);
-    }
-  }, [myMoviesIsLoading]);
-
-  // Loaders and Error
   if (myMoviesIsLoading) {
     return <Loader />;
   }
@@ -132,20 +127,6 @@ const MyMovieList = (props: TProps) => {
   if (myMoviesError) {
     return <div>An Error Occured</div>;
   }
-
-  // Fill api ids arrays
-  myMovies.map((movie) => api_ids.push(movie.api_id));
-  myMovies.filter((movie) => {
-    if (movie.alreadySeen) {
-      api_idsAlreadySeen.push(movie.api_id);
-    }
-    if (!movie.alreadySeen) {
-      api_idsToWatch.push(movie.api_id);
-    }
-    if (movie.favourite) {
-      api_idsFavourite.push(movie.api_id);
-    }
-  });
 
   // No session
   if (!session) {
