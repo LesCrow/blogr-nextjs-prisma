@@ -11,7 +11,7 @@ import { releaseDate, runtimeToHours } from "../../utils/constants";
 import AddAMovie from "../../components/AddAmovie";
 import Button from "../../components/Button";
 import { getMovieByApiId } from "../../utils/fetcher";
-import { Movie } from "@prisma/client";
+// import { Movie } from "@prisma/client";
 import Loader from "../../components/Loader";
 
 // export const getServerSideProps: GetServerSideProps = async ({ params }) => {
@@ -42,29 +42,30 @@ const Movie: React.FC = () => {
     movieById.getOne(idToNumber)
   );
 
-  const {
-    data: movieInMyList,
-    isLoading: movieInMyListIsLoading,
-    error: movieInMyListError,
-  } = useQuery<Movie[]>(
-    ["myMovie"],
-    async () => await getMovieByApiId.getOne(idToNumber)
-  );
+  // const {
+  //   data: movieInMyList,
+  //   isLoading: movieInMyListIsLoading,
+  //   error: movieInMyListError,
+  // } = useQuery<Movie[]>(
+  //   ["myMovie"],
+  //   async () => await getMovieByApiId.getOne(idToNumber)
+  // );
 
-  useEffect(() => {
-    if (movieInMyList && movieInMyList.length > 0) {
-      setIsMovieInMyList(true);
-    }
-  }, [movieInMyList]);
+  // useEffect(() => {
+  //   if (movieInMyList && movieInMyList.length > 0) {
+  //     setIsMovieInMyList(true);
+  //   }
+  // }, [movieInMyList]);
 
   // Loadors and Error
-  if (movieDetailsIsLoading || movieInMyListIsLoading) {
+  // || movieInMyListIsLoading
+  if (movieDetailsIsLoading) {
     return <Loader />;
   }
 
-  if (movieDetailsError || movieInMyListError) {
-    return <div>An Error Occured</div>;
-  }
+  // if (movieDetailsError || movieInMyListError) {
+  //   return <div>An Error Occured</div>;
+  // }
 
   const director: DirectorProps[] = movieDetails.credits.crew.filter(
     ({ job }) => job === "Director"
@@ -76,9 +77,9 @@ const Movie: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center space-y-2 mt-8 pb-8">
-      {session && (
+      {/* {session && (
         <AddAMovie myMovie={movieInMyList} isMovieInMyList={isMovieInMyList} />
-      )}
+      )} */}
 
       <Image
         src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`}
@@ -89,7 +90,7 @@ const Movie: React.FC = () => {
       <div className="w-[200px] space-y-4">
         <div className="flex justify-between place-items-end">
           <h2 className="text-3xl text-primary">{movieDetails.title}</h2>
-          {isMovieInMyList && movieInMyList[0] !== undefined ? (
+          {/* {isMovieInMyList && movieInMyList[0] !== undefined ? (
             movieInMyList[0].alreadySeen ? (
               <Image
                 src="/pictos/checkmark.png"
@@ -107,7 +108,7 @@ const Movie: React.FC = () => {
             )
           ) : (
             <></>
-          )}
+          )} */}
 
           {/* 
           {isMovieInMyList && movieInMyList[0].alreadySeen ? (

@@ -6,6 +6,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   const { id } = req.query;
 
+  console.log(id);
+
   switch (method) {
     case "GET":
       try {
