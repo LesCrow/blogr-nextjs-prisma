@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import MovieCard from "../components/MovieCard";
 import { MovieProps } from "../utils/globalTypes";
-import { Montaga } from "@next/font/google";
 import Link from "next/link";
+import { fetchGenres } from "../utils/tmdbFetcher";
 
 export default function GetLucky() {
   const [randomMovie, setRandomMovie] = useState<MovieProps>(null);
@@ -32,8 +32,8 @@ export default function GetLucky() {
       const movieData = response.data;
       if (response.status == 200) {
         setError(false);
+        setRandomMovie(movieData);
       }
-      setRandomMovie(movieData);
     } catch (error) {
       console.error(
         "Une erreur s'est produite lors de la récupération du film aléatoire.",
@@ -44,12 +44,16 @@ export default function GetLucky() {
     }
   };
 
+  useEffect(() => {
+    fetchGenres();
+  }, []);
+
   return (
     <div>
       <div className=" ">
         <Button
           content="GET LUCKY"
-          handleClick={() => getRandomMovie(getRandomInt(1, 1000))}
+          handleClick={() => getRandomMovie(getRandomInt(1, 890226))}
           style={"flex my-10 hover:text-secondary"}
         />
       </div>

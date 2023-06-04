@@ -33,3 +33,18 @@ export const moviePoster = {
     (await axiosInstanceTmdb.get(`https://image.tmdb.org/t/p/w500${query}`))
       .data,
 };
+
+export const fetchGenres = async () => {
+  try {
+    const response = await axiosInstanceTmdb.get(
+      `genre/movie/list?api_key=${process.env.NEXT_PUBLIC_APIKEY}&language=fr-FR`
+    );
+    const genres = response.data.genres;
+    console.log(genres);
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors de la récupération des genres :",
+      error
+    );
+  }
+};
