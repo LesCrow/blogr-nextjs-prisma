@@ -4,9 +4,10 @@ import Button from "../components/Button";
 import MovieCard from "../components/MovieCard";
 import { MovieProps } from "../utils/globalTypes";
 import { Montaga } from "@next/font/google";
+import Link from "next/link";
 
 export default function GetLucky() {
-  const [randomMovie, setRandomMovie] = useState<MovieProps>();
+  const [randomMovie, setRandomMovie] = useState<MovieProps>(null);
   const [error, setError] = useState(false);
   const errors = [
     "Et si tu lisais un livre aujourd'hui ?",
@@ -39,6 +40,7 @@ export default function GetLucky() {
         error
       );
       setError(true);
+      setRandomMovie(null);
     }
   };
 
@@ -52,42 +54,19 @@ export default function GetLucky() {
         />
       </div>
       <div>
-        {/* {error && <p>{error}</p>} */}
-        {error ? (
-          <p>{errors[Math.floor(Math.random() * errors.length)]}</p>
-        ) : (
-          <>
-            {randomMovie ? (
-              <div>
-                <h2>{randomMovie.title}</h2>
-                <p>{randomMovie.overview}</p>
-                {/* Affichez d'autres détails du film si nécessaire */}
-              </div>
-            ) : (
-              <p>Chargement en cours...</p>
-            )}
-          </>
+        {error && (
+          <p className="w-fit mx-auto">
+            {errors[Math.floor(Math.random() * errors.length)]}
+          </p>
+        )}
+        {randomMovie && (
+          <div className="w-fit mx-auto">
+            <Link href={`p/${randomMovie.id}`} key={randomMovie.id}>
+              <MovieCard movie={randomMovie} />
+            </Link>
+          </div>
         )}
       </div>
-      {/* <div>
-        {error ? (
-          <p>{error}</p>
-        ) : randomMovie ? (
-          <MovieCard movie={randomMovie} />
-        ) : (
-          <p>Chargement</p>
-        )}
-      </div>
-      {randomMovie !== undefined && (
-        <div className="w-fit  mx-auto">
-          <p className="text-white">sdfsdf</p>
-          {error ? (
-            <p className="text-white">{error}</p>
-          ) : (
-            <MovieCard movie={randomMovie} />
-          )}
-        </div>
-      )} */}
     </div>
   );
 }
