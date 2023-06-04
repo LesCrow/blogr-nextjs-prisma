@@ -24,13 +24,25 @@ export default function Sidebar() {
         />
       }
     >
-      <div className="space-y-4 text-3xl">
-        <Link onClick={handleCloseMenu} href="/">
+      <div className=" text-3xl">
+        <Link className="hover:underline" onClick={handleCloseMenu} href="/">
           HOME
         </Link>
         <br />
-        <Link onClick={handleCloseMenu} href="/mymovies">
+        <Link
+          className="hover:underline"
+          onClick={handleCloseMenu}
+          href="/mymovies"
+        >
           MA LISTE
+        </Link>
+        <br />
+        <Link
+          className="hover:underline"
+          onClick={handleCloseMenu}
+          href="/getlucky"
+        >
+          GET LUCKY
         </Link>
       </div>
     </Menu>

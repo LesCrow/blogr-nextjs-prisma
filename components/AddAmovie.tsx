@@ -54,8 +54,6 @@ export default function AddAmovie({ myMovie, isMovieInMyList }: Props) {
     movieFetcher.update(id, alreadySeen, favourite);
   };
 
-  console.log("state :", isFavourite, "data:", myMovie[0].favourite);
-
   return (
     <>
       <ToastContainer position="top-center" />

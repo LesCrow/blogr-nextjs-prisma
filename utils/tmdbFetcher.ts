@@ -11,7 +11,7 @@ export const movieByString = {
 };
 
 export const movieById = {
-  getOne: async (id: any) =>
+  getOne: async (id: number) =>
     (
       await axiosInstanceTmdb.get(
         `/movie/${id}?api_key=${process.env.NEXT_PUBLIC_APIKEY}&append_to_response=credits&language=fr-FR`
